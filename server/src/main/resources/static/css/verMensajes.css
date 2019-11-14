@@ -1,0 +1,10 @@
+#list-groupPhp5 {
+    overflow: scroll;
+    overflow-x: hidden;
+    max-height: 900px;
+}
+
+.unread {
+    background-color: #007bff;
+    height: 5px;
+}

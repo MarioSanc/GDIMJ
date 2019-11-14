@@ -1,0 +1,39 @@
+ #administracionLabel{
+      text-align: center;
+      margin-top: 20px;
+}
+
+#contenedorTabla{
+    overflow:scroll;
+    overflow-x: hidden;
+    max-height: 600px;
+}
+
+.datosTabla{
+    display:flex;
+    flex-direction: row;
+    -ms-flex-align: center;
+    align-items:center;
+}
+.texto-datos-tabla{
+    display: inline-block;
+}
+.userIcon{
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.botonOpciones{
+    margin-top: auto;
+    margin-bottom: auto;
+    vertical-align: middle;
+}
+
+.opcionesTabla{
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+}
