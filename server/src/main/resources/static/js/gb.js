@@ -52,46 +52,45 @@ function createProfesor(profesor) {
   }
 }
 function cargarContestar() {
-  var url = "garabato.html";
+  var url = "index.html";
   $.ajax({
-    type: "POST",
-    url: url,
-    data: {},
-    success: function(datos) {
-      $('#panelPrincipal').empty();
-      $('#panelPrincipal').load("contestarMensaje.html",{},function(response,status,xhr){
-        $('#li_left_all_num').append(3);
-      });
-    }
+      type: "GET",
+      url: url,
+      data: {},
+      success: function(datos) {
+        $("#administrationPage").hide();
+        $("#sendMessagePage").hide();
+        $("#mainIndexPage").show();
+      }
   });
 }
 
 function cargarEnviarms() {
-    var url = "garabato.html";
+    var url = "index.html";
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: url,
         data: {},
         success: function(datos) {
-          $('#panelPrincipal').empty();
-          $('#panelPrincipal').load("enviarMensaje.html",{},function(response,status,xhr){
-            
-          });
+          $("#administrationPage").hide();
+          $("#mainIndexPage").hide();
+          $("#sendMessagePage").show();
         }
     });
 }
 
 function cargarAdministracion() {
-    var url = "garabato.html";
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {},
-        success: function(datos) {
-            $('#panelPrincipal').empty();
-            $('#panelPrincipal').load("administracion.html");
-        }
-    });
+  var url = "index.html";
+  $.ajax({
+      type: "GET",
+      url: url,
+      data: {},
+      success: function(datos) {
+        $("#sendMessagePage").hide();
+        $("#mainIndexPage").hide();
+        $("#administrationPage").show();
+      }
+  });
 }
 
 function createGroupItem(mensaje) {
