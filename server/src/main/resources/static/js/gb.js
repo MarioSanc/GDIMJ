@@ -298,8 +298,8 @@ $(function() {
           url: "index.html",
           data: {},
           success: function(datos) {
-            $("#loginPage").hide();
-            $("#indexPage").show();
+            $("#loginPage").fadeOut();
+            $("#indexPage").fadeIn();
           }
         });
       } else {
