@@ -22,7 +22,43 @@ import * as Gb from './gbapi.js'
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function cargarContestar() {
+  var url = "garabato.html";
+  $.ajax({
+      type: "POST",
+      url: url,
+      data: {},
+      success: function(datos) {
+          $('#panelPrincipal').empty();
+          $('#panelPrincipal').load("contestarMensaje.html");
+      }
+  });
+}
+function cargarEnviarms() {
+  var url = "garabato.html";
+  $.ajax({
+      type: "POST",
+      url: url,
+      data: {},
+      success: function(datos) {
+          $('#panelPrincipal').empty();
+          $('#panelPrincipal').load("enviarMensaje.html");
+      }
+  });
+}
 
+function cargarAdministracion() {
+  var url = "garabato.html";
+  $.ajax({
+      type: "POST",
+      url: url,
+      data: {},
+      success: function(datos) {
+          $('#panelPrincipal').empty();
+          $('#panelPrincipal').load("administracion.html");
+      }
+  });
+}
 function createGroupItem(mensaje) {
     const rid = 'x_' + Math.floor(Math.random() * 1000000);
     const hid = 'h_' + rid;
@@ -119,8 +155,16 @@ $(function() {
             console.log('Error actualizando', e);
         }
     }
-
-
+    $("#cargarContestar").click((id)=>{
+      cargarContestar();
+    });
+    
+    $("#cargarEnviarms").click((id)=>{
+      cargarEnviarms();
+    });
+    $("#cargarAdministracion").click((id)=>{
+      cargarAdministracion();
+    });
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
