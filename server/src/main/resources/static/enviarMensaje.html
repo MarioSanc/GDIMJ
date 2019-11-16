@@ -33,3 +33,15 @@
         </div>
     </form>
 </div>
+<script src="js/jquery-3.3.1.js"></script>
+<script src="js/bootstrap.bundle-4.3.1.js"></script>
+<script src="js/tinymce.min.js"></script>
+<script src="js/gb.js" type="module"></script>
+<script type="text/javascript">
+    tinymce.init({
+        selector: '#inputTextoAnuncio',
+        plugins: ['link image lists table'],
+        toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignjustify | bullist numlist outdent indent | image link table | removeformat',
+        menubar: false,
+    });
+</script>
