@@ -15,13 +15,11 @@
       <!-- panel lateral, demostrando acordeones (secciones expansibles) -->
       <div class="col-sm-2">
         <div class="accordion" id="accordionExampleF">
-
           <h3 class="mb-0">
             <div style="text-align:center;">
               Mensajes
             </div>
           </h3>
-
           <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExampleF">
             <div class="card-body">
               <div class="list-group" id="lista-categorias">
@@ -43,11 +41,10 @@
                 </a>
                 <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto">
                   Eliminados            
-               </a>
+                </a>
               </div>
             </div>
           </div>
-
         </div>
       </div>
 

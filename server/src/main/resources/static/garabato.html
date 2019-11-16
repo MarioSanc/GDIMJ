@@ -16,7 +16,7 @@
   <!-- Navbar de la pagina -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
-        <a class="navbar-brand" href="contestarMensaje.php">GARABATO</a>
+        <a class="navbar-brand" href="#" onclick="cargarContestar();">GARABATO</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -25,10 +25,10 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="enviarMensaje.php">Enviar mensaje</a>
+                    <a class="nav-link" href="#" onclick="cargarEnviarms();">Enviar mensaje</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="administracion.php">Administración</a>
+                    <a class="nav-link" href="#" onclick="cargarAdministracion();">Administración</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
@@ -213,7 +213,7 @@
     </div>
      <!-- panel izquierdo-->
     <div class="container-fluid">
-        <div class="row">
+        <div class="row" id="panelPrincipal">
             <!-- panel lateral, demostrando acordeones (secciones expansibles) -->
             <div class="col-sm-2">
                 <div class="accordion" id="accordionExampleF">
@@ -250,41 +250,6 @@
             </div>
         </div>  
     </div>
-    <!-- container-fluid expande el contenedor para que ocupe todo el espacio disponible -->
-    <h4 style='text-align: center;margin-top:2%;'> Nuevo Mensaje </h4>
-    <div class="col-sm-8 anuncio" style="margin-left:auto;margin-right:auto;margin-top:2%;">
-        <form method="post">
-            <div class="form-row datos-anuncio">
-                <div class="form-group col-md-6">
-                    <label for="selectClass2">Selecciona clase</label>
-                    <select class="form-control" data-live-search="true" id="selectClassEM">
-                        <option value="none" selected disabled hidden>-clase-</option>
-                        <option>1A</option>
-                        <option>1B</option>
-                        <option>1C</option>
-                        <option>1D</option>
-                    </select>
-                </div>
-                <div class="form-group col-md-6">
-                    <label>Asunto</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="selectAsunto">
-                    </div>
-                </div>
-            </div>
-            <div class="form-row texto-anuncio">
-                <div class="form-group col">
-                    <label for="inputTextoAnuncio">Escribir mensaje</label>
-                    <textarea id="inputTextoAnuncio" class="form-control"></textarea>
-                </div>
-            </div>
-            <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
-            <div class="form-row justify-content-end">
-                <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar mensaje</button>
-                <button type="submit" class="btn btn-primary" id="boton-publicar-mail" style="margin-left: 10px">Enviar mensaje</button>
-            </div>
-        </form>
-    </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="js/jquery-3.3.1.js"></script>
@@ -298,6 +263,196 @@
         toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignjustify | bullist numlist outdent indent | image link table | removeformat',
         menubar: false,
         });
+        function loadEM(){
+            const html = [
+                '<div class="col-sm-8 anuncio" style="margin-left:auto;margin-right:auto;margin-top:2%;">',
+                "<h4 style='text-align: center;margin-top:2%;'> Nuevo Mensaje </h4>",
+                '<form method="post">',
+                '<div class="form-row datos-anuncio">',
+                '<div class="form-group col-md-6">',
+                '<label for="selectClass2">Selecciona clase</label>',
+                '<select class="form-control" data-live-search="true" id="selectClassEM">',
+                '<option value="none" selected disabled hidden>-clase-</option>',
+                '<option>1A</option>',
+                '<option>1B</option>',
+                '<option>1C</option>',
+                '<option>1D</option>',
+                '</select>',
+                '</div>',
+                '<div class="form-group col-md-6">',
+                '<label>Asunto</label>',
+                '<div class="input-group">',
+                '<input type="text" class="form-control" id="selectAsunto">',
+                '</div>',
+                '</div>',
+                '</div>',
+                '<div class="form-row texto-anuncio">',
+                '<div class="form-group col">',
+                '<label for="inputTextoAnuncio">Escribir mensaje</label>',
+                '<textarea id="inputTextoAnuncio" class="form-control"></textarea>',
+                '</div>',
+                ' </div>',
+                '<!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->',
+                '<div class="form-row justify-content-end">',
+                '<button type="submit" id="boton-descartar" class="btn btn-primary">Descartar mensaje</button>',
+                ' <button type="submit" class="btn btn-primary" id="boton-publicar-mail" style="margin-left: 10px">Enviar mensaje</button>',
+                ' </div>',
+                '</form>',
+                ' </div>'
+            ];
+            return $(html.join(''));
+        }
+        function loadAdministracion(){
+            const html = [
+                '<div class="container">',
+                '<h2 id="administracionLabel">Administración</h2>',
+                '<input class="form-control" id="myInput" type="text" placeholder="Buscar..">',
+                '<br>',
+                '<div id="contenedorTabla">',
+                ' <table class="table table-bordered table-striped" id="administrationTable">',
+                ' <thead>',
+                ' <tr>',
+                ' <th>Datos</th>',
+                '<th>Clases</th>',
+                ' <th>Opciones</th>',
+                ' </div>',
+                ' </tr>',
+                ' </thead>',
+                '<tbody id="myTable">',
+                ' <tr>',
+                '<td>John Nieve</td>',
+                ' <td>1A</td>',
+                ' <td>-</td>',
+                ' </tr>',
+                '<tr>',
+                ' <td>Mary June July</td>',
+                '<td>2A</td>',
+                ' <td>-</td>',
+                ' </tr>',
+                '<tr>',
+                ' <td>July August September</td>',
+                ' <td>1C</td>',
+                ' <td>-</td>',
+                '</tr>',
+                ' <tr>',
+                '  <td>Miguel Hernandez</td>',
+                '<td>2B</td>',
+                ' <td>-</td>',
+                ' </tr>',
+                '</tbody>',
+                '</table>',
+                ' </div>',
+                '</div>'
+            ];
+            return $(html.join(''));
+        }
+        function loadContestar(){
+            const html = [
+                '<div class="col-sm-2">',
+                '<div class="accordion" id="accordionExampleF">',
+                '<h3 class="mb-0">',
+                '<div style="text-align:center;">',
+                ' Mensajes',
+                '</div>',
+                '</h3>',
+                '<div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExampleF">',
+                '<div class="card-body">',
+                '<div class="list-group" id="lista-categorias">',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroTodos">',
+                'Todos',
+                '<span class="badge badge-primary badge-pill " id="li_left_all_num"></span>',
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroRecibidos">',
+                'Recibidos     ',          
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroEnviados">',
+                'Enviados             ',
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroArchivados">',
+                'Archivados             ',
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroFavoritos">',
+                'Favoritos',         
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto">',
+                'Eliminados',           
+                '</a>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                '</div>',
+                "<div class='col-sm-4 anuncio' style='justify-content:center;'>",
+                "<h4 style='text-align: center;'id='labelListaMensajes'> Todos</h4>",
+                '<div class="list-group" id="list-groupPhp5">',
+                '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start overflow-auto" id="Arturo">',
+                '<div class="d-flex w-100 justify-content-between">',
+                '<h5 class="mb-1">Arturo 1C</h5>',
+                '<small>3 days ago</small>',
+                '</div>',
+                '<p class="mb-1">Duda sobre la clase del otro dia </p>',
+                '<small>Hola,buenas tardes. No estuve demasiado atento a la clase de Matemáticas del martes y me gustaría saber si has mandado ejercicios para casa. Gracias.</small>',
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">',
+                '<div class="d-flex w-100 justify-content-between">',
+                '<h5 class="mb-1">Julio 3C</h5>',
+                '<small class="text-muted">3 days ago</small>',
+                '</div>',
+                '<p class="mb-1">Ejercicio 4</p>',
+                '<small class="text-muted">Hola, no se hacer el ejercicio 4 de la hoja 2,¿Podrías resolverlo en clase?Gracias.</small>',
+                '</a>',
+                '<a href="#" class="list-group-item list-group-item-action flex-column align-items-start">',
+                '<div class="d-flex w-100 justify-content-between">',
+                '<h5 class="mb-1">Elena 2B</h5>',
+                '<small class="text-muted">3 days ago</small>',
+                '</div>',
+                '<p class="mb-1">Hola profe</p>',
+                '<small class="text-muted">Hola, solo quería saludar. Adios</small>',
+                '</a>',
+                '</div>',
+                '</div>',
+                '<div class="col-sm-6 anuncio" id="ContestarMs">',
+                '<!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->',
+                '</div>'
+            ];
+            return $(html.join(''));
+        }
+        function cargarEnviarms(){
+            var url = "garabato.html";
+            $.ajax({
+                type: "POST",
+                url:url,
+                data:{},
+                success: function(datos){
+                    $('#panelPrincipal').empty();
+                    $('#panelPrincipal').append(loadEM());
+                }
+            });
+        }
+        function cargarAdministracion(){
+            var url = "garabato.html";
+            $.ajax({
+                type: "POST",
+                url:url,
+                data:{},
+                success: function(datos){
+                    $('#panelPrincipal').empty();
+                    $('#panelPrincipal').append(loadAdministracion());
+                }
+            });
+        }
+        function cargarContestar(){
+            var url = "garabato.html";
+            $.ajax({
+                type: "POST",
+                url:url,
+                data:{},
+                success: function(datos){
+                    $('#panelPrincipal').empty();
+                    $('#panelPrincipal').append(loadContestar());
+                }
+            });
+        }
     </script>
 </body>
 
