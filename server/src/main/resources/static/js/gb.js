@@ -22,17 +22,48 @@ import * as Gb from './gbapi.js'
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function createGuardian(res) {
+  if (res.type === "guardian") {
+      const html = [
+          '<option>', res.first_name, '</option>'
+      ];
+      return $(html.join(''));
+  }
+}
+function createAlumnos(alumno) {
+  const html = [
+      '<option>', alumno.first_name, '</option>'
+  ];
+  return $(html.join(''));
+}
+function createClases(clase) {
+  const html = [
+      '<option>', clase.cid, '</option>'
+  ];
+  return $(html.join(''));
+}
+function createProfesor(profesor) {
+  if (profesor.type === "teacher") {
+      const html = [
+          '<option>', profesor.first_name, '</option>'
+      ];
+
+      return $(html.join(''));
+  }
+}
 function cargarContestar() {
-    var url = "garabato.html";
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {},
-        success: function(datos) {
-            $('#panelPrincipal').empty();
-            $('#panelPrincipal').load("contestarMensaje.html");
-        }
-    });
+  var url = "garabato.html";
+  $.ajax({
+    type: "POST",
+    url: url,
+    data: {},
+    success: function(datos) {
+      $('#panelPrincipal').empty();
+      $('#panelPrincipal').load("contestarMensaje.html",{},function(response,status,xhr){
+        $('#li_left_all_num').append(3);
+      });
+    }
+  });
 }
 
 function cargarEnviarms() {
@@ -42,8 +73,10 @@ function cargarEnviarms() {
         url: url,
         data: {},
         success: function(datos) {
-            $('#panelPrincipal').empty();
-            $('#panelPrincipal').load("enviarMensaje.html");
+          $('#panelPrincipal').empty();
+          $('#panelPrincipal').load("enviarMensaje.html",{},function(response,status,xhr){
+            
+          });
         }
     });
 }
@@ -146,21 +179,143 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 $(function() {
 
     // funcion de actualización de ejemplo. Llámala para refrescar interfaz
-    function update(result) {
+    window.demo = function update(result) {
         try {
             // vaciamos un contenedor
             $("#accordionExample").empty();
+            //$('#li_left_all_num').append(3);
+            $("#filtroTodos").empty();
             // y lo volvemos a rellenar con su nuevo contenido
             Gb.globalState.messages.forEach(m => $("#accordionExample").append(createGroupItem(m)));
             // y asi para cada cosa que pueda haber cambiado
         } catch (e) {
             console.log('Error actualizando', e);
         }
-    }
+      }
     $("#cargarContestar").click((id) => {
-        cargarContestar();
+      cargarContestar();
     });
+    $("#button-save-clas").click((e) =>{
+      var nombrClase = $("#nombreClaseLabel").val();
+      var alumno = $("#selectAlum").val();
+      var profesor = $("#selecProfesor").val();
+      var alumnos = [];
+      var profesores = [];
+      profesores.push(profesor);
+      alumnos.push(alumno);
+      e.preventDefault();
+      Gb.addClass(new Gb.EClass(nombrClase, alumnos, profesores));
+      profesores = profesores.toString();
+      let profes = profesores.split(',');
+      profes.forEach(p => {
+          let pos = Gb.globalState.users.findIndex(u => { return u.first_name == p });
+          if (pos > -1)
+              Gb.globalState.users[pos].classes.push(nombrClase);
+      });
+      alert(" Se ha añadido la clase: " + nombrClase + "\nCon los alumnos: " + alumnos + "\n y profesor: " + profesores);
+      //window.demo();
+      //console.clear();
+      //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+      
+    });
+    //Añadir alumno
+    $("#anAlumnoH").click((id) => {
+      $("#selectClass").empty();
+      $("#selectRes").empty();
+      $("#selectClass").append('<option value="none" selected disabled hidden>-clase-</option>');
+      Gb.globalState.classes.forEach(c => $("#selectClass").append(createClases(c)));
+      $("#selectRes").append('<option value="none" selected disabled hidden>-responsable-</option>');
+      Gb.globalState.users.forEach(g => $("#selectRes").append(createGuardian(g)));
+  });
+    //Añadir usuario
+    $("#anUserH").click((id) => {
+      $("#selectType").empty();
+      $("#selectClass2").empty();
+      $("#selectAlumU").empty();
+      $("#selectType").append('<option selected disabled hidden>-tipo-</option>');
+      $("#selectType").append('<option>Profesor</option>');
+      $("#selectType").append('<option>Responsable</option>');
+      $("#selectType").append('<option>Admin</option>');
+      $("#selectClass2").append('<option value="none" selected disabled hidden>-clase-</option>');
+      Gb.globalState.classes.forEach(c => $("#selectClass2").append(createClases(c)));
+      Gb.globalState.students.forEach(s => $("#selectAlumU").append(createAlumnos(s)));
+  });
+    //Añadir Clase
+    $("#anClaseH").click((id) => {
+      $("#selectAlum").empty();
+      $("#selecProfesor").empty();
+      Gb.globalState.students.forEach(s => $("#selectAlum").append(createAlumnos(s)));
+      Gb.globalState.users.forEach(u => $("#selecProfesor").append(createProfesor(u)));
+  });
+  //añadir Usuario
+  $("#anUser").unbind('click').click((target) => {
+    let uid = Gb.Util.randomWord();
+    let type = $("#selectType").val();
+    let tipo;
+    if (type === "Profesor") {
+        tipo = Gb.UserRoles.TEACHER;
+    } else if (type === "Responsable") {
+        tipo = Gb.UserRoles.GUARDIAN;
+    }
+    let nombre = $("#nUser").val();
+    let apellido = $("#apUser").val();
+    let clase = $("#selectClass2").val();
+    let tel = $("#telUser").val();
+    let telefonos = [];
+    telefonos.push(tel);
+    let alum = $("#selectAlumU").val();
+    target.preventDefault();
+    /*if (type === "Responsable") {
+        alumnos = alumnos.toString();
+        let alumns = alumnos.split(',');
+        alumns.forEach(a => {
+            let pos = Gb.globalState.students.findIndex(u => { return u.first_name == a });
+            if (pos > -1) {
+                Gb.globalState.students[pos].guardians.push(nombre);
+                let clas = Gb.globalState.students[pos].cid;
+                if (!clases.includes(clas))
+                    clases.push(clas);
+            }
+        });
+    }*/
+    Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, clase, alum,"123Afaga"));
+    //window.demo();
+    alert("Se ha añadido el usuario: " + nombre + " " + apellido +
+        " \nCon rol: " + tipo +
+        " \nCon telefono/s:\n " + telefonos + " \na la clase: " + clase + "\nCon alumno/s:\n" + alum);
+    //console.clear();
+    //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+  });
+  //Logeo
+  $("#loginButton").click((id) => {
+    let user = $("#loginUser").val();
+    let pass = $("#loginPass").val();
 
+    Gb.login(user, pass).then(d => {
+      let u = Gb.resolve(user); 
+      if (u !== undefined) { 
+        $.ajax({
+          type: "GET",
+          url: "garabato.html",
+          data: {},
+          success: function(datos) {
+            $("#loginPage").hide();
+            $("#indexPage").show();
+          }
+        });
+      } else {
+        $.ajax({
+          type: "POST",
+          url: "garabato.html",
+          data: {},
+          success: function(datos) {
+            $("#loginErrorMessage").show();
+          }
+        });
+
+      }
+   });
+  });
     $("#cargarEnviarms").click((id) => {
         cargarEnviarms();
     });
@@ -171,8 +326,8 @@ $(function() {
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
     // ejemplo de login
-    Gb.login("u8Z9FQ", "tOSY_A").then(d => console.log("login ok!", d));
-
+    Gb.login("u8Z9FQ", "tOSY_A").then(d => console.log("login ok!",d));
+    
     // // ejemplo de crear una clase, una vez logeados
     // Gb.addClass({ cid: "1A" })
 
@@ -188,6 +343,7 @@ $(function() {
     //         "1A"
     //     ]
     // });
+    window.demo();
 });
 
 // cosas que exponemos para usarlas desde la consola
