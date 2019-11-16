@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap-4.3.1.css">
+    <link rel="shortcut icon" href="./img/icon.png">
+    <!-- Esto aparece como título de la ventana o pestaña en el navegador: cámbialo -->
+    <title>Enviar mensaje</title>
+</head>
+
+<body>
+    <!-- Navbar de la pagina -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <!-- nombre del sitio; es un enlace que lleva a la página ppal -->
+        <a class="navbar-brand" href="#" onclick="cargarContestar();">GARABATO</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cargarEnviarms();">Enviar mensaje</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#" onclick="cargarAdministracion();">Administración</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Añadir
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" data-toggle="modal" data-target="#modalAddAlum" id="anAlumnoH">Añadir alumno</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#modalAddUser" id="anUserH">Añadir usuario</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" data-toggle="modal" data-target="#modalAddClass" id="anClaseH">Añadir clase</a>
+                    </div>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="#">Cerrar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- Añadir alumno -->
+    <div class="modal fade" id="modalAddAlum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Añadir alumno</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-name">Nombre del alumno</label>
+                        <input type="text" id="inputName" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-surname">Apellidos del alumno</label>
+                        <input type="text" id="inputName2" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-dni">DNI del alumno</label>
+                        <input type="text" id="inputDNI" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <label for="selectClass">Selecciona clase</label>
+                        <select class="form-control" data-live-search="true" id="selectClass"> 
+                            <option value="none" selected disabled hidden>-clase-</option>
+                            <option>1A</option>
+                            <option>1B</option>
+                            <option>1C</option>
+                            <option>1D</option>
+                        </select>
+                    </div>
+                    <div class="md-form mb-6">
+                        <label for="selectRes">Selecciona responsable</label>
+                        <select multiple class="form-control" data-live-search="true" id="selectRes"> 
+                            <option value="none" selected disabled hidden>-responsable-</option>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                            <option>D</option>
+                        </select>
+                        <button class="btn btn-primary" style="margin-top: 10px">Guardar</button>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="boton-publicar">Guardar y
+                    salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Añadir Clase -->
+    <div class="modal fade" id="modalAddClass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Añadir clase</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-name">Nombre de la clase</label>
+                        <input type="text" id="nombreClaseLabel" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-body mx-3">
+                    <label>Alumnos</label>
+                    <select class="form-control" id="selectAlum" multiple>
+                        <option>Pepe</option>
+                        <option>Pepa</option>
+                        <option>Pepi</option>
+                        <option>Pepo</option>
+                    </select>
+                    <button class="btn btn-primary" style="margin-top: 10px">Guardar </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <label>Profesores</label>
+                    <select multiple="multiple" class="form-control custom-headers" data-live-search="true" id="selecProfesor"> 
+                        <option value="none" selected disabled hidden>-Prefesor-</option>
+                        <option>Profe1</option>
+                        <option>Profe2</option>
+                        <option>Profe3</option>
+                        <option>Profe4</option>
+                    </select>
+                    <button class="btn btn-primary" style="margin-top: 10px">Guardar </button>
+                </div>
+
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="button-save-clas">Guardar ysalir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Añadir usuario-->
+    <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header text-center">
+                    <h4 class="modal-title w-100 font-weight-bold">Añadir usuario</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body mx-3">
+                    <label for="defaultForm-surname">Selecciona tipo de usuario</label>
+                    <select class="form-control" data-live-search="true" id="selectType">
+                        <option value="none" selected disabled hidden>-tipo-</option>
+                        <option>profe</option>
+                        <option>respon</option>
+                        <option>admin</option>
+                    </select>
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-name">Nombre</label>
+                        <input type="text" id="nUser" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label for="defaultForm-surname">Apellido</label>
+                        <input type="text" id="apUser" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <i class="fas fa-envelope prefix grey-text"></i>
+                        <label>Telefonos</label>
+                        <input type="tel" multiple="multiple" id="telUser" class="form-control">
+                    </div>
+                    <div class="md-form mb-6">
+                        <label for="selectClass2">Selecciona clase</label>
+                        <select class="form-control" data-live-search="true" id="selectClass2" multiple>
+                        <option value="none" selected disabled hidden>-clase-</option>
+                            <option>1A</option>
+                            <option>1B</option>
+                            <option>1C</option>
+                            <option>1D</option>
+                        </select>
+                        <button class="btn btn-primary" style="margin-top: 10px">Guardar clases</button>
+                    </div>
+                    <div class="md-form mb-6">
+                        <label class="mdb-main-label">Selecciona alumnos</label>
+                        <select class="form-control" id="selectAlumU" multiple>
+                            <option>A</option>
+                            <option>B</option>
+                            <option>C</option>
+                        </select>
+                        <button class="btn btn-primary" style="margin-top: 10px">Guardar alumnos</button>
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-center">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="anUser">Guardar y salir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- panel izquierdo-->
+    <div class="container-fluid">
+        <div class="row" id="panelPrincipal">
+            <!-- panel lateral, demostrando acordeones (secciones expansibles) -->
+            <div class="col-sm-2">
+                <div class="accordion" id="accordionExampleF">
+                    <h3 class="mb-0">
+                        <div style="text-align:center;">Mensajes</div>
+                    </h3>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExampleF">
+                        <div class="card-body">
+                            <div class="list-group" id="lista-categorias">
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroTodos">
+                                    Todos
+                                    <span class="badge badge-primary badge-pill " id="li_left_all_num"></span>
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroRecibidos">
+                                    Recibidos               
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroEnviados">
+                                    Enviados             
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroArchivados">
+                                    Archivados             
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroFavoritos">
+                                    Favoritos             
+                                </a>
+                                <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto">
+                                    Eliminados            
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- enviar mensaje -->
+    <div class="col-sm-8 anuncio" style="display:none;" id="enviarMs">
+        <h4 style='text-align: center;margin-top:2%;'> Nuevo Mensaje </h4>
+        <form method="post">
+            <div class="form-row datos-anuncio">
+                <div class="form-group col-md-6">
+                    <label for="selectClass2">Selecciona clase</label>
+                    <select class="form-control" data-live-search="true" id="selectClassEM">
+        <option value="none" selected disabled hidden>-clase-</option>
+        <option>1A</option>
+        <option>1B</option>
+        <option>1C</option>
+        <option>1D</option>
+        </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Asunto</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="selectAsunto">
+                    </div>
+                </div>
+            </div>
+            <div class="form-row texto-anuncio">
+                <div class="form-group col"></div>
+                <label for="inputTextoAnuncio">Escribir mensaje</label>
+                <textarea id="inputTextoAnuncio" class="form-control"></textarea>
+            </div>
+            <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
+            <div class="form-row justify-content-end">
+                <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar mensaje</button> <button type="submit" class="btn btn-primary" id="boton-publicar-mail" style="margin-left: 10px">Enviar mensaje</button>
+            </div>
+    </div>
+    <!-- fin div enviarMs -->
+
+    </form>
+    </div>
+
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="js/jquery-3.3.1.js"></script>
+    <script src="js/bootstrap.bundle-4.3.1.js"></script>
+    <script src="js/tinymce.min.js"></script>
+    <script src="js/gb.js" type="module"></script>
+    <script type="text/javascript">
+        tinymce.init({
+            selector: '#inputTextoAnuncio',
+            plugins: ['link image lists table'],
+            toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignjustify | bullist numlist outdent indent | image link table | removeformat',
+            menubar: false,
+        });
+
+        function cargarEnviarms() {
+
+            var url = "garabato.html";
+            $.ajax({
+                type: "POST",
+                url: url,
+                data: {},
+                success: function(datos) {
+                    $("#enviarMs").style.display = "initial";
+                }
+            });
+
+        }
+    </script>
+</body>
+
+</html>
