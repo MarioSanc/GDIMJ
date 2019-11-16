@@ -296,7 +296,7 @@ $(function() {
       if (u !== undefined) { 
         $.ajax({
           type: "GET",
-          url: "garabato.html",
+          url: "index.html",
           data: {},
           success: function(datos) {
             $("#loginPage").hide();
@@ -306,7 +306,7 @@ $(function() {
       } else {
         $.ajax({
           type: "POST",
-          url: "garabato.html",
+          url: "index.html",
           data: {},
           success: function(datos) {
             $("#loginErrorMessage").show();
