@@ -23,42 +23,44 @@ import * as Gb from './gbapi.js'
 // en respuesta a algún evento.
 //
 function cargarContestar() {
-  var url = "garabato.html";
-  $.ajax({
-      type: "POST",
-      url: url,
-      data: {},
-      success: function(datos) {
-          $('#panelPrincipal').empty();
-          $('#panelPrincipal').load("contestarMensaje.html");
-      }
-  });
+    var url = "garabato.html";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {},
+        success: function(datos) {
+            $('#panelPrincipal').empty();
+            $('#panelPrincipal').load("contestarMensaje.html");
+        }
+    });
 }
+
 function cargarEnviarms() {
-  var url = "garabato.html";
-  $.ajax({
-      type: "POST",
-      url: url,
-      data: {},
-      success: function(datos) {
-          $('#panelPrincipal').empty();
-          $('#panelPrincipal').load("enviarMensaje.html");
-      }
-  });
+    var url = "garabato.html";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {},
+        success: function(datos) {
+            $('#panelPrincipal').empty();
+            $('#panelPrincipal').load("enviarMensaje.html");
+        }
+    });
 }
 
 function cargarAdministracion() {
-  var url = "garabato.html";
-  $.ajax({
-      type: "POST",
-      url: url,
-      data: {},
-      success: function(datos) {
-          $('#panelPrincipal').empty();
-          $('#panelPrincipal').load("administracion.html");
-      }
-  });
+    var url = "garabato.html";
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {},
+        success: function(datos) {
+            $('#panelPrincipal').empty();
+            $('#panelPrincipal').load("administracion.html");
+        }
+    });
 }
+
 function createGroupItem(mensaje) {
     const rid = 'x_' + Math.floor(Math.random() * 1000000);
     const hid = 'h_' + rid;
@@ -155,37 +157,37 @@ $(function() {
             console.log('Error actualizando', e);
         }
     }
-    $("#cargarContestar").click((id)=>{
-      cargarContestar();
+    $("#cargarContestar").click((id) => {
+        cargarContestar();
     });
-    
-    $("#cargarEnviarms").click((id)=>{
-      cargarEnviarms();
+
+    $("#cargarEnviarms").click((id) => {
+        cargarEnviarms();
     });
-    $("#cargarAdministracion").click((id)=>{
-      cargarAdministracion();
+    $("#cargarAdministracion").click((id) => {
+        cargarAdministracion();
     });
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
     // ejemplo de login
-    Gb.login("16337065G", "ZX05e").then(d => console.log("login ok!", d));
+    Gb.login("u8Z9FQ", "tOSY_A").then(d => console.log("login ok!", d));
 
-    // ejemplo de crear una clase, una vez logeados
-    Gb.addClass({ cid: "1A" })
+    // // ejemplo de crear una clase, una vez logeados
+    // Gb.addClass({ cid: "1A" })
 
-    // ejemplo de crear un usuario, una vez logueados como admin (los no-admin no pueden hacer eso)
-    Gb.addUser({
-        "uid": "18950946G",
-        "first_name": "Elena",
-        "last_name": "Enseña Enséñez",
-        "type": "teacher",
-        "tels": ["141-456-781"],
-        "password": "axarW!3",
-        "classes": [
-            "1A"
-        ]
-    });
+    // // ejemplo de crear un usuario, una vez logueados como admin (los no-admin no pueden hacer eso)
+    // Gb.addUser({
+    //     "uid": "18950946G",
+    //     "first_name": "Elena",
+    //     "last_name": "Enseña Enséñez",
+    //     "type": "teacher",
+    //     "tels": ["141-456-781"],
+    //     "password": "axarW!3",
+    //     "classes": [
+    //         "1A"
+    //     ]
+    // });
 });
 
 // cosas que exponemos para usarlas desde la consola
