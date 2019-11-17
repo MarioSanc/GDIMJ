@@ -403,6 +403,9 @@ $(function() {
         alumnos.push(alum);
         let aux = [];
         target.preventDefault();
+        alert("Se ha añadido el usuario: " + nombre + " " + apellido +
+            " \nCon rol: " + tipo +
+            " \nCon telefono/s:\n " + telefonos);
         if (type === "Responsable") {
             tipo = Gb.UserRoles.GUARDIAN;
             alumnos = alumnos.toString();
@@ -424,7 +427,7 @@ $(function() {
             alert("Se ha añadido el usuario: " + nombre + " " + apellido +
                 " \nCon rol: " + tipo +
                 " \nCon telefono/s:\n " + telefonos + " \na la clase: " + clase);
-        } else if (type === "Administrador") {
+        } else if (type === "Admin") {
             tipo = Gb.UserRoles.ADMIN;
             Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, "", "", "123Afaga"));
             alert("Se ha añadido el usuario: " + nombre + " " + apellido +
@@ -526,15 +529,15 @@ $(function() {
 
     $("#selectType").on("change", function() {
         $("#camposAddUser").show();
-        if($("#selectType").val() === "Responsable") {
+        if ($("#selectType").val() === "Responsable") {
             $("#selectorClasesAddUser").hide();
             $("#selectorAlumnosAddUser").show();
         }
-        if($("#selectType").val() === "Profesor"){
+        if ($("#selectType").val() === "Profesor") {
             $("#selectorAlumnosAddUser").hide();
-            $("#selectorClasesAddUser").show();        
+            $("#selectorClasesAddUser").show();
         }
-        if($("#selectType").val() === "Admin"){
+        if ($("#selectType").val() === "Admin") {
             $("#selectorClasesAddUser").hide();
             $("#selectorAlumnosAddUser").hide();
         }
