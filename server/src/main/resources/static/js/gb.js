@@ -106,7 +106,8 @@ function createTableUsers(user) {
     });
     html.push('</div></td>', );
     //Columna Opciones
-    html.push('<td class="opcionesTabla"><button type="submit" id="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+    html.push('<td class="opcionesTabla"><button type="submit" id="modificarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button>');
+    html.push('<button type="submit" id="eliminarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
 
     return $(html.join(''));
 }
