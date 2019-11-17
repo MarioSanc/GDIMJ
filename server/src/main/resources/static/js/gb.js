@@ -482,6 +482,7 @@ $("#boton-publicar-mail").click((target) => {
           url: "index.html",
           data: {},
           success: function(datos) {
+            Gb.list();
             $("#loginPage").fadeOut();
             $("#indexPage").fadeIn();
           }
