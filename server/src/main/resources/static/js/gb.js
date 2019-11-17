@@ -22,6 +22,46 @@ var userSession = [];
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function validarApellidoAlumno(apellidoAlumno){
+    if(apellidoAlumno == ""){
+        return false;
+    }
+    return true
+}
+function validarNombreAlumno(nombreAlumno){
+    if(nombreAlumno == ""){
+        return false;
+    }
+    return true;
+}
+function validateDNI(dni) {
+    var numero, letD, letra;
+    var expresion_regular_dni = /^[XYZ]?\d{5,8}[A-Z]$/;
+
+    dni = dni.toUpperCase();
+
+    if(expresion_regular_dni.test(dni) === true){
+        numero = dni.substr(0,dni.length-1);
+        numero = numero.replace('X', 0);
+        numero = numero.replace('Y', 1);
+        numero = numero.replace('Z', 2);
+        letD = dni.substr(dni.length-1, 1);
+        numero = numero % 23;
+        letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
+        letra = letra.substring(numero, numero+1);
+        if (letra != letD) {
+            //alert('Dni erroneo, la letra del NIF no se corresponde');
+            return true;
+        }else{
+            //alert('Dni correcto');
+            return true;
+        }
+    }else{
+        //alert('Dni erroneo, formato no válido');
+        return false;
+    }
+}
+
 function createMail(mensaje) {
     const html = [
         '<div class="form-group col-md-10">',
@@ -451,25 +491,44 @@ $(function() {
         var res = $("#selectRes").val();
         var guardians = [];
         var aux = [];
-        guardians.push(res);
-        target.preventDefault();
-
-        guardians = guardians.toString();
-        let guards = guardians.split(',');
-        guards.forEach(g => {
-            let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
-            if (pos > -1) {
-                Gb.globalState.users[pos].classes.push(claseSeleccionada);
-                Gb.globalState.users[pos].students.push(nombreAlumno);
-                aux.push(Gb.globalState.users[pos].uid);
+        if(!validarNombreAlumno(nombreAlumno)){
+            $("#loginErrorMessageAñadirAlumNombre").show();
+        }
+        else{
+            $("#loginErrorMessageAñadirAlumNombre").hide();
+            if(!validarApellidoAlumno(apellidoAlumno)){
+                $("#loginErrorMessageAñadirAlumApellido").show();
             }
-        });
-        Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
-        //window.demo();
-        alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
-        //console.clear();
-        //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+            else{ 
+                $("#loginErrorMessageAñadirAlumApellido").hide();
+                if(!validateDNI(dni)){
+                    $("#loginErrorMessageAñadirAlumID").show();
+                }
+                else{
+                    $("#loginErrorMessageAñadirAlumID").hide();
+                    $("#modalAddAlum").modal('hide')
+                    guardians.push(res);
+                    target.preventDefault();
+                    guardians = guardians.toString();
+                    let guards = guardians.split(',');
+                    guards.forEach(g => {
+                        let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
+                        if (pos > -1) {
+                            Gb.globalState.users[pos].classes.push(claseSeleccionada);
+                            Gb.globalState.users[pos].students.push(nombreAlumno);
+                            aux.push(Gb.globalState.users[pos].uid);
+                        }
+                    });
+                    Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
+                    //window.demo();
+                    alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
+                    //console.clear();
+                    //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+                }
+            }
+        }
     });
+
     //Funcionalidad al boton enviar mail
     $("#boton-publicar-mail").click((target) => {
         let msgid = Gb.Util.randomWord();
@@ -518,15 +577,25 @@ $(function() {
     $("#cargarEnviarms").click((id) => {
         cargarEnviarms();
         $("#selectClassEM").empty();
+        $("#selectClassEM").append('<option value="none" selected disabled hidden>Destinatario</option>');
         //Se hace esto para saber de que tipo soy, así me mostratrá una cosa u otra en el destinatario.
         let pos = Gb.globalState.users.findIndex(us => { return us.uid == userSession.uid });
-        if (pos >= 0)
+        if (pos >= 0){
             userSession = Gb.globalState.users[pos];
-
-        $("#selectClassEM").append('<option value="none" selected disabled hidden>-clase-</option>');
-        Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
+            if(userSession.type == Gb.UserRoles.GUARDIAN){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
+            }
+            if(userSession.type == Gb.UserRoles.TEACHER){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+            }
+            if(userSession.type == Gb.UserRoles.ADMIN){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
+            }
+        }
     });
-
     $("#cargarAdministracion").click((id) => {
         cargarAdministracion();
         $("#myTable").empty();
