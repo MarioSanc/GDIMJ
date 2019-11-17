@@ -55,14 +55,12 @@
 
                 <a class="navbar-brand" href="#" id="cargarContestar">GARABATO</a>
 
-                <button class="navbar-toggler" type="button" data-toggle="collapse"
-                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                    aria-label="Toggle navigation">
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav mr-auto" style="cursor:pointer;">
                         <li class="nav-item">
                             <a class="nav-link" href="#" id="cargarEnviarms">
                                 Enviar mensaje
@@ -74,8 +72,7 @@
                             </a>
                         </li>
                         <li class="nav-item dropdown ">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 Añadir
                             </a>
                             <div class="dropdown-menu " aria-labelledby="navbarDropdown">
@@ -102,8 +99,7 @@
             </nav>
         </div>
         <!------------------------------------------------------------------- MODAL AÑADIR ALUMNO ------------------------------------------------------------------------->
-        <div class="modal fade" id="modalAddAlum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="modalAddAlum" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -158,8 +154,7 @@
             </div>
         </div>
         <!------------------------------------------------------------------- MODAL AÑADIR CLASE ------------------------------------------------------------------------->
-        <div class="modal fade" id="modalAddClass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="modalAddClass" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -187,8 +182,7 @@
                     </div>
                     <div class="modal-body mx-3">
                         <label>Profesores</label>
-                        <select multiple="multiple" class="form-control custom-headers" data-live-search="true"
-                            id="selecProfesor">
+                        <select multiple="multiple" class="form-control custom-headers" data-live-search="true" id="selecProfesor">
                             <option value="none" selected disabled hidden>-Prefesor-</option>
                             <option>Profe1</option>
                             <option>Profe2</option>
@@ -206,8 +200,7 @@
             </div>
         </div>
         <!------------------------------------------------------------------- MODAL AÑADIR USUARIO ------------------------------------------------------------------------->
-        <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-            aria-hidden="true">
+        <div class="modal fade" id="modalAddUser" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header text-center">
@@ -282,38 +275,26 @@
                                 Mensajes
                             </div>
                         </h3>
-                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne"
-                            data-parent="#accordionExampleF">
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordionExampleF">
                             <div class="card-body">
                                 <div class="list-group" id="lista-categorias">
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto"
-                                        id="filtroTodos">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroTodos">
                                         Todos
                                         <span class="badge badge-primary badge-pill " id="li_left_all_num"></span>
                                     </a>
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto"
-                                        id="filtroRecibidos">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroRecibidos">
                                         Recibidos
                                     </a>
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto"
-                                        id="filtroEnviados">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroEnviados">
                                         Enviados
                                     </a>
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto"
-                                        id="filtroArchivados">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroArchivados">
                                         Archivados
                                     </a>
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto"
-                                        id="filtroFavoritos">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto" id="filtroFavoritos">
                                         Favoritos
                                     </a>
-                                    <a href="#"
-                                        class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto">
+                                    <a href="#" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center overflow-auto">
                                         Eliminados
                                     </a>
                                 </div>
@@ -325,9 +306,7 @@
                 <div class="col-sm-4 anuncio" style='justify-content:center;'>
                     <h4 style='text-align: center;' id="labelListaMensajes"> Todos</h4>
                     <div class="list-group" id="list-groupPhp5">
-                        <a href="#"
-                            class="list-group-item list-group-item-action flex-column align-items-start overflow-auto"
-                            id="Arturo">
+                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start overflow-auto" id="Arturo">
                             <div class="d-flex w-100 justify-content-between">
                                 <h5 class="mb-1">Arturo 1C</h5>
                                 <small>3 days ago</small>
@@ -385,40 +364,39 @@
     <div id="sendMessagePage" style="display: none;">
         <div class="col-sm-8 anuncio" style="margin-left:auto;margin-right:auto;margin-top:2%;">
             <h4 style='text-align: center;margin-top:2%;'> Nuevo Mensaje </h4>
-            
-                <div class="form-row datos-anuncio">
-                    <div class="form-group col-md-6">
-                        <label for="selectClass2">Selecciona clase</label>
-                        <select class="form-control" data-live-search="true" id="selectClassEM">
+
+            <div class="form-row datos-anuncio">
+                <div class="form-group col-md-6">
+                    <label for="selectClass2">Selecciona clase</label>
+                    <select class="form-control" data-live-search="true" id="selectClassEM">
                             <option value="none" selected disabled hidden>-clase-</option>
                             <option>1A</option>
                             <option>1B</option>
                             <option>1C</option>
                             <option>1D</option>
                         </select>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label>Asunto</label>
-                        <div class="input-group">
-                            <input type="text" class="form-control" id="selectAsunto">
-                        </div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label>Asunto</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="selectAsunto">
                     </div>
                 </div>
-                <div class="form-row texto-anuncio">
-                    <div class="form-group col">
-                        <label for="inputTextoAnuncio">Escribir mensaje</label>
-                        <textarea id="inputTextoAnuncio" class="form-control"></textarea>
-                    </div>
+            </div>
+            <div class="form-row texto-anuncio">
+                <div class="form-group col">
+                    <label for="inputTextoAnuncio">Escribir mensaje</label>
+                    <textarea id="inputTextoAnuncio" class="form-control"></textarea>
                 </div>
-                <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
-                <div class="form-row justify-content-end">
-                    <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar
+            </div>
+            <!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->
+            <div class="form-row justify-content-end">
+                <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar
                         mensaje</button>
-                    <button type="submit" class="btn btn-primary" id="boton-publicar-mail"
-                        style="margin-left: 10px">Enviar
+                <button type="submit" class="btn btn-primary" id="boton-publicar-mail" style="margin-left: 10px">Enviar
                         mensaje</button>
-                </div>
-            
+            </div>
+
         </div>
     </div>
     <!------------------------------------------------------------------------ ADMINISTRACIÓN ----------------------------------------------------------->
@@ -466,12 +444,19 @@
         <script src="js/bootstrap.bundle-4.3.1.js"></script>
         <script src="js/tinymce.min.js"></script>
         <script src="js/gb.js" type="module"></script>
-
+        <script type="text/javascript">
+            tinymce.init({
+                selector: '#inputTextoAnuncio',
+                plugins: ['link image lists table'],
+                toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter alignjustify | bullist numlist outdent indent | image link table | removeformat',
+                menubar: false,
+            });
+        </script>
         <script>
-            $(document).ready(function () {
-                $("#myInput").on("keyup", function () {
+            $(document).ready(function() {
+                $("#myInput").on("keyup", function() {
                     var value = $(this).val().toLowerCase();
-                    $("#myTable tr").filter(function () {
+                    $("#myTable tr").filter(function() {
                         $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                     });
                 });
