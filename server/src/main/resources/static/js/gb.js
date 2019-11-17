@@ -373,13 +373,8 @@ $(function() {
     });
     //Añadir usuario
     $("#anUserH").click((id) => {
-        $("#selectType").empty();
         $("#selectClass2").empty();
         $("#selectAlumU").empty();
-        $("#selectType").append('<option selected disabled hidden>-tipo-</option>');
-        $("#selectType").append('<option>Profesor</option>');
-        $("#selectType").append('<option>Responsable</option>');
-        $("#selectType").append('<option>Admin</option>');
         $("#selectClass2").append('<option value="none" selected disabled hidden>-clase-</option>');
         Gb.globalState.classes.forEach(c => $("#selectClass2").append(createClases(c)));
         Gb.globalState.students.forEach(s => $("#selectAlumU").append(createAlumnos(s)));
@@ -527,21 +522,22 @@ $(function() {
         $("#myTable").empty();
         Gb.globalState.users.forEach(u => $("#myTable").append(createTableUsers(u)));
         Gb.globalState.students.forEach(u => $("#myTable").append(createTableStudents(u)));
+    });
 
-
-        $("#eliminarUsuario").click((id) => {
-            alert("we");
-            $.ajax({
-                type: "POST",
-                url: "index.html",
-                data: {},
-                success: function(datos) {
-                    let userId = $(this).attr('userId');
-                    Gb.rm(userId);
-                }
-            });
-        });
-
+    $("#selectType").on("change", function() {
+        $("#camposAddUser").show();
+        if($("#selectType").val() === "Responsable") {
+            $("#selectorClasesAddUser").hide();
+            $("#selectorAlumnosAddUser").show();
+        }
+        if($("#selectType").val() === "Profesor"){
+            $("#selectorAlumnosAddUser").hide();
+            $("#selectorClasesAddUser").show();        
+        }
+        if($("#selectType").val() === "Admin"){
+            $("#selectorClasesAddUser").hide();
+            $("#selectorAlumnosAddUser").hide();
+        }
     });
 
     $("#cerrarSesion").click((id) => {
