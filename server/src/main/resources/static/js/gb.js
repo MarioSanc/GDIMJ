@@ -1,7 +1,7 @@
 "use strict"
 
 import * as Gb from './gbapi.js'
-
+var userSession = [];
 /**
  * Librería de cliente para interaccionar con el servidor de Garabatos.
  * Prácticas de IU 2019-20
@@ -23,7 +23,7 @@ import * as Gb from './gbapi.js'
 // en respuesta a algún evento.
 //
 function createMail(mensaje) {
-    const html = [
+  const html = [
         '<div class="form-group col-md-10">',
         '<h2>', mensaje.from, '</h2>',
         '<h3>', mensaje.title, ' </h3>',
@@ -58,8 +58,8 @@ function createMail(mensaje) {
         'menubar: false,',
         '});',
         '</script>'
-    ];
-    return $(html.join(''));
+  ];
+  return $(html.join(''));
 }
 
 function createTableUsers(user) {
@@ -472,7 +472,7 @@ $(function() {
         let asunto = $("#selectAsunto").val();
         let ms = $("#inputTextoAnuncio").val();
         target.preventDefault();
-        Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms, "u8Z9FQ"));
+        Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms, userSesion.uid));
         alert(" Se ha enviado el mail: " + ms + " a " + claseEnviar + "\nCon asunto: " + asunto);
         // window.demo();
         //console.clear();
@@ -491,9 +491,10 @@ $(function() {
                     url: "index.html",
                     data: {},
                     success: function(datos) {
-                        Gb.list();
+                        Gb.list();                                   
                         $("#loginPage").fadeOut();
                         $("#indexPage").fadeIn();
+                        userSession = u; 
                     }
                 });
             } else {
@@ -512,9 +513,15 @@ $(function() {
     $("#cargarEnviarms").click((id) => {
         cargarEnviarms();
         $("#selectClassEM").empty();
+        //Se hace esto para saber de que tipo soy, así me mostratrá una cosa u otra en el destinatario.
+        let pos = Gb.globalState.users.findIndex(us => { return us.uid == userSession.uid });
+        if(pos >= 0)
+          userSession = Gb.globalState.users[pos];
+
         $("#selectClassEM").append('<option value="none" selected disabled hidden>-clase-</option>');
         Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
     });
+    
     $("#cargarAdministracion").click((id) => {
         cargarAdministracion();
         $("#myTable").empty();
@@ -538,6 +545,7 @@ $(function() {
     });
 
     $("#cerrarSesion").click((id)=>{
+        userSession = [];
         Gb.logout();
     });
 
