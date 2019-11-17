@@ -168,11 +168,12 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body mx-3">
+                    <div class="modal-body mx-3" >
                         <div class="md-form mb-6">
                             <i class="fas fa-envelope prefix grey-text"></i>
                             <label for="defaultForm-name">Nombre de la clase</label>
-                            <input type="text" id="nombreClaseLabel" class="form-control">
+                            <input type="text" id="nombreClaseLabel" class="form-control" required>
+                            <div id = "validaNombreClase"></div>
                         </div>
                     </div>
                     <div class="modal-body mx-3">
@@ -200,7 +201,7 @@
 
                     <div class="modal-footer d-flex justify-content-center">
                         <button type="button" class="btn btn-primary" data-dismiss="modal" id="button-save-clas">Guardar
-                            ysalir</button>
+                            y salir</button>
                     </div>
                 </div>
             </div>

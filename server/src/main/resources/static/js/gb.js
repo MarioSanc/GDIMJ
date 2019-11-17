@@ -289,13 +289,15 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
     }
 }
 
+
 //
 // PARTE 2:
 // Código de pegamento, ejecutado sólo una vez que la interfaz esté cargada.
 // Generalmente de la forma $("selector").cosaQueSucede(...)
 //
 $(function() {
-
+  $("#loginPage").hide();
+  $("#indexPage").show();
     // funcion de actualización de ejemplo. Llámala para refrescar interfaz
     window.demo = function update(result) {
         try {
@@ -308,6 +310,7 @@ $(function() {
             console.log('Error actualizando', e);
         }
     }
+
     $("#cargarContestar").click((id) => {
         cargarContestar();
     });
@@ -327,6 +330,7 @@ $(function() {
     });
     //Boton añadir clase
     $("#button-save-clas").click((e) => {
+      $("#validaNombreClase").empty();
         var nombrClase = $("#nombreClaseLabel").val();
         var alumno = $("#selectAlum").val();
         var profesor = $("#selecProfesor").val();
@@ -337,7 +341,13 @@ $(function() {
         profesores.push(profesor);
         alumnos.push(alumno);
         e.preventDefault();
+        if( nombrClase == null || nombrClase.length != 2 || nombrClase.length == 0) {
+          $("#validaNombreClase").append('<p style="color:red;">Nombre incorrecto de la clase.</p>');
 
+          return false;
+        }
+        // Si el script ha llegado a este punto, todas las condiciones
+        // se han cumplido, por lo que se devuelve el valor true
         profesores = profesores.toString();
         let profes = profesores.split(',');
         alumnos = alumnos.toString();
@@ -356,12 +366,11 @@ $(function() {
 
         });
         Gb.addClass(new Gb.EClass(nombrClase, auxAlumnos, auxProfes));
-        alert(" Se ha añadido la clase: " + nombrClase + "\nCon los alumnos: " + alumnos + "\n y profesor: " + profesores);
         //window.demo();
         //console.clear();
         //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
-
     });
+    
     //Añadir alumno
     $("#anAlumnoH").click((id) => {
         $("#selectClass").empty();
@@ -552,7 +561,8 @@ $(function() {
         let userId = $(this).attr('userId');
 
     });
-
+   
+   
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
