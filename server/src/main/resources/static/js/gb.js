@@ -22,6 +22,118 @@ import * as Gb from './gbapi.js'
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function createMail(mensaje) {
+  const html = [
+      '<div class="form-group col-md-10">',
+      '<h2>', mensaje.from, '</h2>',
+      '<h3>', mensaje.title, ' </h3>',
+      '</div>',
+      '<div class="form-group col-md-10">',
+      '<p>', mensaje.body, '</p>',
+      '</div>',
+      '     <form method="post">',
+
+      '<div class="form-group col">',
+      '<label for="inputTextoAnuncio">Escribir mensaje</label>',
+      '<textarea id="inputTextoAnuncio" class="form-control" style="width:100%;">',
+      '       Escribir mensaje.',
+      '</textarea>',
+      '</div>',
+
+      '<!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->',
+      '<div class="form-row justify-content-end" style="margin-right:15px;">',
+      ' <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar mensaje</button>',
+      '<button id="botonResponderMailDOS" class="btn btn-primary" style="margin-left: 10px">Enviar mensaje</button>',
+      '</div>',
+      '</form>',
+      '<script src="js/jquery-3.3.1.js"></script>',
+      '<script src="js/bootstrap.bundle-4.3.1.js"></script>',
+      '<script src="js/tinymce.min.js"></script>',
+      '<script src="js/gb.js" type="module"></script>',
+      '<script type="text/javascript">',
+      'tinymce.init({',
+      'selector: "#inputTextoAnuncio",',
+      'plugins: ["link image lists table"],',
+      'toolbar: "undo redo | bold italic backcolor | alignleft aligncenter alignjustify | bullist numlist outdent indent | image link table | removeformat",',
+      'menubar: false,',
+      '});',
+      '</script>'
+  ];
+  return $(html.join(''));
+}
+function createTableUsers(user) {
+  let html = [];
+  //Columna Datos
+  html = [
+          '<tr>',
+          '<td class="datosTabla">',
+      ]
+      //Icono profesor
+  if (user.type === "teacher") {
+      html.push('<img class="userIcon alt="profesor" src="../img/profesor.png">',
+          '<p style="display:none;">profesor teacher</p>', );
+  }
+  if (user.type === "admin") {
+      html.push('<img class="userIcon alt="profesor" src="../img/admin.png">',
+          '<p style="display:none;">administrador</p>', );
+  }
+  //Icono responsable
+  if (user.type === "guardian")
+      html.push('<img class="userIcon alt="profesor" src="../img/guardian.png">',
+          '<p style="display:none;">guardian responsable padre tutor</p>', );
+
+  html.push(
+      '<div class="texto-datos-tabla">',
+      'Nombre: ', user.first_name, ' ', user.last_name, '<br>',
+      'DNI: ', user.uid, '<br>',
+  );
+  if (user.tels.length) {
+      html.push('Teléfonos: ', );
+      user.tels.forEach(telefono => {
+          html.push(
+              telefono, ' ',
+          );
+      });
+  }
+  html.push('</td>', );
+  //Columna Clases
+  html.push('<td>', );
+  user.classes.forEach(clase => {
+      html.push(
+          clase, ' ',
+      );
+  });
+  html.push('</div></td>', );
+  //Columna Opciones
+  html.push('<td class="opcionesTabla"><button type="submit" id="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+
+  return $(html.join(''));
+}
+
+function createTableStudents(user) {
+  let html = [];
+  //Columna Datos
+  html = [
+      '<tr>',
+      '<td class="datosTabla">',
+      '<img class="userIcon alt="profesor" src="../img/alumno.png">',
+      '<p style="display:none;">alumno student</p>',
+      '<div class="texto-datos-tabla">',
+      'Nombre: ', user.first_name, ' ', user.last_name, '<br>',
+      'DNI: ', user.sid, '<br>',
+  ]
+  html.push('Responsables: ', );
+  user.guardians.forEach(guardian => {
+      html.push(guardian, ', ', );
+  });
+  html.push('</div></td>', );
+  //Columna Clases
+  html.push('<td>', user.cid, '</td>');
+  //Columna Opciones
+  html.push('<td class="opcionesTabla"><button type="submit" id="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+
+  return $(html.join(''));
+}
 function createGuardian(res) {
   if (res.type === "guardian") {
       const html = [
@@ -32,7 +144,7 @@ function createGuardian(res) {
 }
 function createAlumnos(alumno) {
   const html = [
-      '<option>', alumno.first_name, '</option>'
+      '<option>', alumno.firstName, '</option>'
   ];
   return $(html.join(''));
 }
@@ -192,23 +304,51 @@ $(function() {
     $("#cargarContestar").click((id) => {
       cargarContestar();
     });
+    // Funcionalidad para ver el mensaje que se quiera en responder mail.
+    $("#list-groupPhp5 a").click((id) => {
+      var currentId = id.currentTarget.id;
+      $("#ContestarMs").empty();
+      Gb.globalState.messages.forEach(function(m) {
+          if (currentId == m.msgid) {
+              m.labels.push("read");
+              $("#ContestarMs").append(createMail(m))
+              globalMessage = m;
+              //window.demo();
+              $("#list-groupPhp5").children("#" + currentId).toggleClass('active');
+          }
+      });
+  });
+    //Boton añadir clase
     $("#button-save-clas").click((e) =>{
       var nombrClase = $("#nombreClaseLabel").val();
       var alumno = $("#selectAlum").val();
       var profesor = $("#selecProfesor").val();
       var alumnos = [];
       var profesores = [];
+      var auxProfes = [];
+      var auxAlumnos = [];
       profesores.push(profesor);
       alumnos.push(alumno);
       e.preventDefault();
-      Gb.addClass(new Gb.EClass(nombrClase, alumnos, profesores));
+      
       profesores = profesores.toString();
       let profes = profesores.split(',');
+      alumnos = alumnos.toString();
+      let alumns = alumnos.split(',');
       profes.forEach(p => {
           let pos = Gb.globalState.users.findIndex(u => { return u.first_name == p });
-          if (pos > -1)
+          if (pos > -1){
               Gb.globalState.users[pos].classes.push(nombrClase);
+              auxProfes.push(Gb.globalState.users[pos].uid);
+            }
       });
+      alumns.forEach(p => {
+        let pos = Gb.globalState.students.findIndex(u => { return u.firstName == p });
+        if (pos > -1)auxAlumnos.push(Gb.globalState.students[pos].sid);
+            //Gb.globalState.users[pos].classes.push(nombrClase);
+            
+    });
+      Gb.addClass(new Gb.EClass(nombrClase, auxAlumnos, auxProfes));
       alert(" Se ha añadido la clase: " + nombrClase + "\nCon los alumnos: " + alumnos + "\n y profesor: " + profesores);
       //window.demo();
       //console.clear();
@@ -257,25 +397,30 @@ $(function() {
     let nombre = $("#nUser").val();
     let apellido = $("#apUser").val();
     let clase = $("#selectClass2").val();
+    
     let tel = $("#telUser").val();
     let telefonos = [];
     telefonos.push(tel);
     let alum = $("#selectAlumU").val();
+    let alumnos = [];
+    alumnos.push(alum);
+    let aux = [];
     target.preventDefault();
-    /*if (type === "Responsable") {
+    if (type === "Responsable") {
         alumnos = alumnos.toString();
         let alumns = alumnos.split(',');
         alumns.forEach(a => {
-            let pos = Gb.globalState.students.findIndex(u => { return u.first_name == a });
+            let pos = Gb.globalState.students.findIndex(u => { return u.firstName == a });
             if (pos > -1) {
                 Gb.globalState.students[pos].guardians.push(nombre);
-                let clas = Gb.globalState.students[pos].cid;
-                if (!clases.includes(clas))
-                    clases.push(clas);
+                aux.push( Gb.globalState.students[pos].sid);
+                //let clas = Gb.globalState.students[pos].cid;
+                //if (!clases.includes(clas))
+                //    clases.push(clas);
             }
         });
-    }*/
-    Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, clase, alum,"123Afaga"));
+    }
+    Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, clase, aux,"123Afaga"));
     //window.demo();
     alert("Se ha añadido el usuario: " + nombre + " " + apellido +
         " \nCon rol: " + tipo +
@@ -283,6 +428,47 @@ $(function() {
     //console.clear();
     //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
   });
+  //Funcionalidad al boton añadir alumno
+  $("#boton-publicar").click((target) => {
+    var nombreAlumno = $("#inputName").val();
+    var apellidoAlumno = $("#inputName2").val();
+    var dni = $("#inputDNI").val();
+    var claseSeleccionada = $("#selectClass").val();
+    var res = $("#selectRes").val();
+    var guardians = [];
+    var aux = [];
+    guardians.push(res);
+    target.preventDefault();
+    
+    guardians = guardians.toString();
+    let guards = guardians.split(',');
+    guards.forEach(g => {
+        let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
+        if (pos > -1) {
+            Gb.globalState.users[pos].classes.push(claseSeleccionada);
+            Gb.globalState.users[pos].students.push(nombreAlumno);
+            aux.push(Gb.globalState.users[pos].uid);
+          }
+    });
+    Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
+    //window.demo();
+    alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
+    //console.clear();
+    //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+  });
+//Funcionalidad al boton enviar mail
+$("#boton-publicar-mail").click((target) => {
+  let msgid = Gb.Util.randomWord();
+  let claseEnviar = $("#selectClassEM").val();
+  let asunto = $("#selectAsunto").val();
+  let ms = $("#inputTextoAnuncio").val();
+  target.preventDefault();
+  Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms,"u8Z9FQ"));
+  alert(" Se ha enviado el mail: " + ms + " a " + claseEnviar + "\nCon asunto: " + asunto);
+ // window.demo();
+  //console.clear();
+  //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+});
   //Logeo
   $("#loginButton").click((id) => {
     let user = $("#loginUser").val();
@@ -315,9 +501,15 @@ $(function() {
   });
     $("#cargarEnviarms").click((id) => {
         cargarEnviarms();
+        $("#selectClassEM").empty();
+        $("#selectClassEM").append('<option value="none" selected disabled hidden>-clase-</option>');
+        Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
     });
     $("#cargarAdministracion").click((id) => {
         cargarAdministracion();
+        $("#myTable").empty();
+        Gb.globalState.users.forEach(u => $("#myTable").append(createTableUsers(u)));
+        Gb.globalState.students.forEach(u => $("#myTable").append(createTableStudents(u)));
     });
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
