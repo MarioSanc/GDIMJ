@@ -516,7 +516,7 @@ $("#boton-publicar-mail").click((target) => {
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
     // ejemplo de login
-    Gb.login("u8Z9FQ", "tOSY_A").then(d => console.log("login ok!",d));
+    //Gb.login("u8Z9FQ", "tOSY_A").then(d => console.log("login ok!",d));
     
     // // ejemplo de crear una clase, una vez logeados
     // Gb.addClass({ cid: "1A" })
