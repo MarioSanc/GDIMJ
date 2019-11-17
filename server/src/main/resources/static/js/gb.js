@@ -23,7 +23,7 @@ var userSession = [];
 // en respuesta a algún evento.
 //
 function createMail(mensaje) {
-  const html = [
+    const html = [
         '<div class="form-group col-md-10">',
         '<h2>', mensaje.from, '</h2>',
         '<h3>', mensaje.title, ' </h3>',
@@ -58,8 +58,8 @@ function createMail(mensaje) {
         'menubar: false,',
         '});',
         '</script>'
-  ];
-  return $(html.join(''));
+    ];
+    return $(html.join(''));
 }
 
 function createTableUsers(user) {
@@ -121,7 +121,7 @@ function createTableStudents(user) {
         '<img class="userIcon alt="profesor" src="../img/alumno.png">',
         '<p style="display:none;">alumno student</p>',
         '<div class="texto-datos-tabla">',
-        'Nombre: ', user.first_name, ' ', user.last_name, '<br>',
+        'Nombre: ', user.firstName, ' ', user.lastName, '<br>',
         'DNI: ', user.sid, '<br>',
     ]
     html.push('Responsables: ', );
@@ -132,7 +132,7 @@ function createTableStudents(user) {
     //Columna Clases
     html.push('<td>', user.cid, '</td>');
     //Columna Opciones
-    html.push('<td class="opcionesTabla"><button type="submit" id="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+    html.push('<td class="opcionesTabla"><button type="submit" id="', user.sid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
 
     return $(html.join(''));
 }
@@ -491,10 +491,10 @@ $(function() {
                     url: "index.html",
                     data: {},
                     success: function(datos) {
-                        Gb.list();                                   
+                        Gb.list();
                         $("#loginPage").fadeOut();
                         $("#indexPage").fadeIn();
-                        userSession = u; 
+                        userSession = u;
                     }
                 });
             } else {
@@ -515,13 +515,13 @@ $(function() {
         $("#selectClassEM").empty();
         //Se hace esto para saber de que tipo soy, así me mostratrá una cosa u otra en el destinatario.
         let pos = Gb.globalState.users.findIndex(us => { return us.uid == userSession.uid });
-        if(pos >= 0)
-          userSession = Gb.globalState.users[pos];
+        if (pos >= 0)
+            userSession = Gb.globalState.users[pos];
 
         $("#selectClassEM").append('<option value="none" selected disabled hidden>-clase-</option>');
         Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
     });
-    
+
     $("#cargarAdministracion").click((id) => {
         cargarAdministracion();
         $("#myTable").empty();
@@ -529,34 +529,34 @@ $(function() {
         Gb.globalState.students.forEach(u => $("#myTable").append(createTableStudents(u)));
 
 
-        $("#eliminarUsuario").click((id)=>{
-          alert("we");
-          $.ajax({
-            type: "POST",
-            url: "index.html",
-            data: {},
-            success: function(datos) {
-              let userId = $(this).attr('userId');
-              Gb.rm(userId);
-            }
-          });
+        $("#eliminarUsuario").click((id) => {
+            alert("we");
+            $.ajax({
+                type: "POST",
+                url: "index.html",
+                data: {},
+                success: function(datos) {
+                    let userId = $(this).attr('userId');
+                    Gb.rm(userId);
+                }
+            });
         });
 
     });
 
-    $("#cerrarSesion").click((id)=>{
+    $("#cerrarSesion").click((id) => {
         userSession = [];
         Gb.logout();
     });
 
-    
 
-    $("#modificarUsuario").click((id)=>{
-      let userId = $(this).attr('userId');
+
+    $("#modificarUsuario").click((id) => {
+        let userId = $(this).attr('userId');
 
     });
 
-        // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
+    // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
     // ejemplo de login
