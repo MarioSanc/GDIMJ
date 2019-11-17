@@ -403,9 +403,7 @@ $(function() {
         alumnos.push(alum);
         let aux = [];
         target.preventDefault();
-        alert("Se ha añadido el usuario: " + nombre + " " + apellido +
-            " \nCon rol: " + tipo +
-            " \nCon telefono/s:\n " + telefonos);
+
         if (type === "Responsable") {
             tipo = Gb.UserRoles.GUARDIAN;
             alumnos = alumnos.toString();
