@@ -182,8 +182,6 @@ $(function() {
         try {
             // vaciamos un contenedor
             $("#accordionExample").empty();
-            //$('#li_left_all_num').append(3);
-            $("#filtroTodos").empty();
             // y lo volvemos a rellenar con su nuevo contenido
             Gb.globalState.messages.forEach(m => $("#accordionExample").append(createGroupItem(m)));
             // y asi para cada cosa que pueda haber cambiado
