@@ -105,7 +105,8 @@ function createTableUsers(user) {
   });
   html.push('</div></td>', );
   //Columna Opciones
-  html.push('<td class="opcionesTabla"><button type="submit" id="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+  html.push('<td class="opcionesTabla"><button type="submit" id="modificarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button>');
+  html.push('<button type="submit" id="eliminarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Eliminar</button></td></tr>');
 
   return $(html.join(''));
 }
@@ -511,8 +512,35 @@ $("#boton-publicar-mail").click((target) => {
         $("#myTable").empty();
         Gb.globalState.users.forEach(u => $("#myTable").append(createTableUsers(u)));
         Gb.globalState.students.forEach(u => $("#myTable").append(createTableStudents(u)));
+
+
+        $("#eliminarUsuario").click((id)=>{
+          alert("we");
+          $.ajax({
+            type: "POST",
+            url: "index.html",
+            data: {},
+            success: function(datos) {
+              let userId = $(this).attr('userId');
+              Gb.rm(userId);
+            }
+          });
+        });
+
     });
-    // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
+
+    $("#cerrarSesion").click((id)=>{
+        Gb.logout();
+    });
+
+    
+
+    $("#modificarUsuario").click((id)=>{
+      let userId = $(this).attr('userId');
+
+    });
+
+        // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
     // ejemplo de login
