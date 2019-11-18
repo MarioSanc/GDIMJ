@@ -22,6 +22,20 @@ var userSession = [];
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function validarContraseña(contraseña){
+    var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([A-Za-z\d]|[^ ]){5,100}$/;
+    if(regex.test(contraseña) == true){
+        return true;
+    }
+    else return false;
+}
+
+function validarTelefonoUsuario(telefono){
+    var regex = /^\d{3}-\d{3}-\d{3}$/;
+    if(telefono == "")return "El campo telefono no puede ser vacio";
+    if(!regex.test(telefono))return "Formato del telefono erroneo(ddd-ddd-ddd)";
+    return "";
+}
 function validarApellidoAlumno(apellidoAlumno){
     if(apellidoAlumno == "")return "El campo apellido del alumno no puede ser vacio";
     if(apellidoAlumno.length < 3)return "Apellido del alumno demasiado corto";
@@ -439,7 +453,6 @@ $(function() {
         let nombre = $("#nUser").val();
         let apellido = $("#apUser").val();
         let clase = $("#selectClass2").val();
-
         let tel = $("#telUser").val();
         let telefonos = [];
         telefonos.push(tel);
@@ -448,34 +461,73 @@ $(function() {
         alumnos.push(alum);
         let aux = [];
         target.preventDefault();
-
-        if (type === "Responsable") {
-            tipo = Gb.UserRoles.GUARDIAN;
-            alumnos = alumnos.toString();
-            let alumns = alumnos.split(',');
-            alumns.forEach(a => {
-                let pos = Gb.globalState.students.findIndex(u => { return u.firstName == a });
-                if (pos > -1) {
-                    Gb.globalState.students[pos].guardians.push(nombre);
-                    aux.push(Gb.globalState.students[pos].sid);
-                }
-            });
-            Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, "", aux, "123Afaga"));
-            alert("Se ha añadido el usuario: " + nombre + " " + apellido +
-                " \nCon rol: " + tipo +
-                " \nCon telefono/s:\n " + telefonos + "\nCon alumno/s:\n" + alum);
-        } else if (type === "Profesor") {
-            tipo = Gb.UserRoles.TEACHER;
-            Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, clase, "", "123Afaga"));
-            alert("Se ha añadido el usuario: " + nombre + " " + apellido +
-                " \nCon rol: " + tipo +
-                " \nCon telefono/s:\n " + telefonos + " \na la clase: " + clase);
-        } else if (type === "Admin") {
-            tipo = Gb.UserRoles.ADMIN;
-            Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, "", "", "123Afaga"));
-            alert("Se ha añadido el usuario: " + nombre + " " + apellido +
-                " \nCon rol: " + tipo +
-                " \nCon telefono/s:\n " + telefonos);
+        let contraseña = $("#añadirUsuarioPassword").val();
+        var error = false;
+        var errorNombre = validarNombreAlumno(nombre);
+        var errorApellido = validarApellidoAlumno(apellido);
+        var errorTelefono = validarTelefonoUsuario(tel);
+        if(!validarContraseña(contraseña)){
+            $("#errorMessageAñadirUsuarioContraseña").empty();
+            $("#errorMessageAñadirUsuarioContraseña").append("<p style='color:red;'>Formato de la contraseña incorrecto</p>");
+            $("#errorMessageAñadirUsuarioContraseña").show();
+            error = true;
+        }
+        else{
+            $("#errorMessageAñadirUsuarioContraseña").hide();
+        }if(errorNombre != ""){
+            $("#errorMessageAñadirUsuarioNombre").empty();
+            $("#errorMessageAñadirUsuarioNombre").append("<p style='color:red;'>"+errorNombre+"</p>");
+            $("#errorMessageAñadirUsuarioNombre").show();
+            error = true;
+        }else{
+            $("#errorMessageAñadirUsuarioNombre").hide();
+        }
+        if(errorApellido!=""){
+            $("#errorMessageAñadirUsuarioApellido").empty();
+            $("#errorMessageAñadirUsuarioApellido").append("<p style='color:red;'>"+errorApellido+"</p>");
+            $("#errorMessageAñadirUsuarioApellido").show();
+            error = true;
+        }else{
+            $("#errorMessageAñadirUsuarioApellido").hide();
+        }
+        if(errorTelefono!=""){
+            $("#errorMessageAñadirUsuarioTelefono").empty();
+            $("#errorMessageAñadirUsuarioTelefono").append("<p style='color:red;'>"+errorTelefono+"</p>");
+            $("#errorMessageAñadirUsuarioTelefono").show();
+            error = true;
+        }else{
+            $("#errorMessageAñadirUsuarioTelefono").hide();
+        }
+        if(!error){
+            $("#modalAddUser").modal('hide');
+            if (type === "Responsable") {
+                tipo = Gb.UserRoles.GUARDIAN;
+                alumnos = alumnos.toString();
+                let alumns = alumnos.split(',');
+                alumns.forEach(a => {
+                    let pos = Gb.globalState.students.findIndex(u => { return u.firstName == a });
+                    if (pos > -1) {
+                        Gb.globalState.students[pos].guardians.push(nombre);
+                        aux.push(Gb.globalState.students[pos].sid);
+                    }
+                });
+                Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, "", aux, contraseña));
+                alert("Se ha añadido el usuario: " + nombre + " " + apellido +
+                    " \nCon rol: " + tipo +
+                    " \nCon telefono/s:\n " + telefonos + "\nCon alumno/s:\n" + alum);
+            } else if (type === "Profesor") {
+                tipo = Gb.UserRoles.TEACHER;
+                Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, clase, "", contraseña));
+                alert("Se ha añadido el usuario: " + nombre + " " + apellido +
+                    " \nCon rol: " + tipo +
+                    " \nCon telefono/s:\n " + telefonos + " \na la clase: " + clase);
+            } else if (type === "Admin") {
+                tipo = Gb.UserRoles.ADMIN;
+                Gb.addUser(new Gb.User(uid, tipo, nombre, apellido, telefonos, "", "", contraseña));
+                alert("Se ha añadido el usuario: " + nombre + " " + apellido +
+                    " \nCon rol: " + tipo +
+                    " \nCon telefono/s:\n " + telefonos);
+            }
         }
     });
     //Funcionalidad al boton añadir alumno
