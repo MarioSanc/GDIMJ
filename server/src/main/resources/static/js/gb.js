@@ -191,7 +191,7 @@ function createTableStudents(user) {
 }
 
 function createGuardian(res) {
-    if (res.type === "guardian") {
+    if (res.type === Gb.UserRoles.GUARDIAN) {
         const html = [
             '<option>', res.first_name, '</option>'
         ];
@@ -214,7 +214,7 @@ function createClases(clase) {
 }
 
 function createProfesor(profesor) {
-    if (profesor.type === "teacher") {
+    if (profesor.type === Gb.UserRoles.TEACHER) {
         const html = [
             '<option>', profesor.first_name, '</option>'
         ];
@@ -676,7 +676,7 @@ $(function() {
                 $("#selectClassEM").append('<optgroup label="RESPONSABLES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
                 $("#selectClassEM").append('<optgroup label="CLASES">');
-                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+                Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
             }
             if(userSession.type == Gb.UserRoles.ADMIN){
                 $("#selectClassEM").append('<optgroup label="CLASES">');
@@ -723,6 +723,7 @@ $(function() {
     $("#cerrarSesion").click((id) => {
         userSession = [];
         Gb.logout();
+        window.demo();
         $("#loginPage").fadeIn();
         $("#indexPage").fadeOut();
 
