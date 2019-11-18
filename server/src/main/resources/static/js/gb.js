@@ -23,23 +23,21 @@ var userSession = [];
 // en respuesta a algún evento.
 //
 function validarApellidoAlumno(apellidoAlumno){
-    if(apellidoAlumno == ""){
-        return false;
-    }
-    return true
+    if(apellidoAlumno == "")return "El campo apellido del alumno no puede ser vacio";
+    if(apellidoAlumno.length < 3)return "Apellido del alumno demasiado corto";
+    return "";
 }
 function validarNombreAlumno(nombreAlumno){
-    if(nombreAlumno == ""){
-        return false;
-    }
-    return true;
+    if(nombreAlumno == "")return "El campo nombre del alumno no puede ser vacio";
+    if(nombreAlumno.length < 3)return "Nombre del alumno de masiado corto";
+    return "";
 }
 function validateDNI(dni) {
     var numero, letD, letra;
     var expresion_regular_dni = /^[XYZ]?\d{5,8}[A-Z]$/;
 
     dni = dni.toUpperCase();
-
+    if(dni == "")return "El dni no puede ser vacio";
     if(expresion_regular_dni.test(dni) === true){
         numero = dni.substr(0,dni.length-1);
         numero = numero.replace('X', 0);
@@ -51,14 +49,14 @@ function validateDNI(dni) {
         letra = letra.substring(numero, numero+1);
         if (letra != letD) {
             //alert('Dni erroneo, la letra del NIF no se corresponde');
-            return true;
+            return "";
         }else{
             //alert('Dni correcto');
-            return true;
+            return "";
         }
     }else{
-        //alert('Dni erroneo, formato no válido');
-        return false;
+        //alert();
+        return 'Dni erroneo, formato no válido';
     }
 }
 
@@ -491,41 +489,53 @@ $(function() {
         var res = $("#selectRes").val();
         var guardians = [];
         var aux = [];
-        if(!validarNombreAlumno(nombreAlumno)){
+        var errorNombre = validarNombreAlumno(nombreAlumno);
+        var errorApellido = validarApellidoAlumno(apellidoAlumno);
+        var errorDNI = validateDNI(dni);
+        var error = false;
+        if(errorNombre != ""){
+            $("#loginErrorMessageAñadirAlumNombre").empty();
+            $("#loginErrorMessageAñadirAlumNombre").append("<p style='color:red;'>"+errorNombre+"</p>");
             $("#loginErrorMessageAñadirAlumNombre").show();
-        }
-        else{
+            error = true;
+        }else{
             $("#loginErrorMessageAñadirAlumNombre").hide();
-            if(!validarApellidoAlumno(apellidoAlumno)){
-                $("#loginErrorMessageAñadirAlumApellido").show();
-            }
-            else{ 
-                $("#loginErrorMessageAñadirAlumApellido").hide();
-                if(!validateDNI(dni)){
-                    $("#loginErrorMessageAñadirAlumID").show();
+        }
+        if(errorApellido!=""){
+            $("#loginErrorMessageAñadirAlumApellido").empty();
+            $("#loginErrorMessageAñadirAlumApellido").append("<p style='color:red;'>"+errorApellido+"</p>");
+            $("#loginErrorMessageAñadirAlumApellido").show();
+            error = true;
+        }else{
+            $("#loginErrorMessageAñadirAlumApellido").hide();
+        }
+        if(validateDNI(dni)!=""){
+            $("#loginErrorMessageAñadirAlumID").empty();
+            $("#loginErrorMessageAñadirAlumID").append("<p style='color:red;'>"+errorDNI+"</p>");
+            $("#loginErrorMessageAñadirAlumID").show();
+            error = true;
+        }else{
+             $("#loginErrorMessageAñadirAlumID").hide();
+        }
+        if(!error){       
+            $("#modalAddAlum").modal('hide')
+            guardians.push(res);
+            target.preventDefault();
+            guardians = guardians.toString();
+            let guards = guardians.split(',');
+            guards.forEach(g => {
+                let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
+                if (pos > -1) {
+                    Gb.globalState.users[pos].classes.push(claseSeleccionada);
+                    Gb.globalState.users[pos].students.push(nombreAlumno);
+                    aux.push(Gb.globalState.users[pos].uid);
                 }
-                else{
-                    $("#loginErrorMessageAñadirAlumID").hide();
-                    $("#modalAddAlum").modal('hide')
-                    guardians.push(res);
-                    target.preventDefault();
-                    guardians = guardians.toString();
-                    let guards = guardians.split(',');
-                    guards.forEach(g => {
-                        let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
-                        if (pos > -1) {
-                            Gb.globalState.users[pos].classes.push(claseSeleccionada);
-                            Gb.globalState.users[pos].students.push(nombreAlumno);
-                            aux.push(Gb.globalState.users[pos].uid);
-                        }
-                    });
-                    Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
-                    //window.demo();
-                    alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
-                    //console.clear();
-                    //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
-                }
-            }
+            });
+            Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
+            //window.demo();
+            alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
+            //console.clear();
+            //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
         }
     });
 
