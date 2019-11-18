@@ -22,6 +22,44 @@ var userSession = [];
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+function validarApellidoAlumno(apellidoAlumno){
+    if(apellidoAlumno == "")return "El campo apellido del alumno no puede ser vacio";
+    if(apellidoAlumno.length < 3)return "Apellido del alumno demasiado corto";
+    return "";
+}
+function validarNombreAlumno(nombreAlumno){
+    if(nombreAlumno == "")return "El campo nombre del alumno no puede ser vacio";
+    if(nombreAlumno.length < 3)return "Nombre del alumno de masiado corto";
+    return "";
+}
+function validateDNI(dni) {
+    var numero, letD, letra;
+    var expresion_regular_dni = /^[XYZ]?\d{5,8}[A-Z]$/;
+
+    dni = dni.toUpperCase();
+    if(dni == "")return "El dni no puede ser vacio";
+    if(expresion_regular_dni.test(dni) === true){
+        numero = dni.substr(0,dni.length-1);
+        numero = numero.replace('X', 0);
+        numero = numero.replace('Y', 1);
+        numero = numero.replace('Z', 2);
+        letD = dni.substr(dni.length-1, 1);
+        numero = numero % 23;
+        letra = 'TRWAGMYFPDXBNJZSQVHLCKET';
+        letra = letra.substring(numero, numero+1);
+        if (letra != letD) {
+            //alert('Dni erroneo, la letra del NIF no se corresponde');
+            return "";
+        }else{
+            //alert('Dni correcto');
+            return "";
+        }
+    }else{
+        //alert();
+        return 'Dni erroneo, formato no válido';
+    }
+}
+
 function createMail(mensaje) {
     const html = [
         '<div class="form-group col-md-10">',
@@ -289,13 +327,15 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
     }
 }
 
+
 //
 // PARTE 2:
 // Código de pegamento, ejecutado sólo una vez que la interfaz esté cargada.
 // Generalmente de la forma $("selector").cosaQueSucede(...)
 //
 $(function() {
-
+  $("#loginPage").hide();
+  $("#indexPage").show();
     // funcion de actualización de ejemplo. Llámala para refrescar interfaz
     window.demo = function update(result) {
         try {
@@ -308,6 +348,7 @@ $(function() {
             console.log('Error actualizando', e);
         }
     }
+
     $("#cargarContestar").click((id) => {
         cargarContestar();
     });
@@ -327,6 +368,7 @@ $(function() {
     });
     //Boton añadir clase
     $("#button-save-clas").click((e) => {
+      $("#validaNombreClase").empty();
         var nombrClase = $("#nombreClaseLabel").val();
         var alumno = $("#selectAlum").val();
         var profesor = $("#selecProfesor").val();
@@ -337,7 +379,13 @@ $(function() {
         profesores.push(profesor);
         alumnos.push(alumno);
         e.preventDefault();
+        if( nombrClase == null || nombrClase.length != 2 || nombrClase.length == 0) {
+          $("#validaNombreClase").append('<p style="color:red;">Nombre incorrecto de la clase.</p>');
 
+          return false;
+        }
+        // Si el script ha llegado a este punto, todas las condiciones
+        // se han cumplido, por lo que se devuelve el valor true
         profesores = profesores.toString();
         let profes = profesores.split(',');
         alumnos = alumnos.toString();
@@ -356,12 +404,11 @@ $(function() {
 
         });
         Gb.addClass(new Gb.EClass(nombrClase, auxAlumnos, auxProfes));
-        alert(" Se ha añadido la clase: " + nombrClase + "\nCon los alumnos: " + alumnos + "\n y profesor: " + profesores);
         //window.demo();
         //console.clear();
         //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
-
     });
+    
     //Añadir alumno
     $("#anAlumnoH").click((id) => {
         $("#selectClass").empty();
@@ -442,25 +489,56 @@ $(function() {
         var res = $("#selectRes").val();
         var guardians = [];
         var aux = [];
-        guardians.push(res);
-        target.preventDefault();
-
-        guardians = guardians.toString();
-        let guards = guardians.split(',');
-        guards.forEach(g => {
-            let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
-            if (pos > -1) {
-                Gb.globalState.users[pos].classes.push(claseSeleccionada);
-                Gb.globalState.users[pos].students.push(nombreAlumno);
-                aux.push(Gb.globalState.users[pos].uid);
-            }
-        });
-        Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
-        //window.demo();
-        alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
-        //console.clear();
-        //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+        var errorNombre = validarNombreAlumno(nombreAlumno);
+        var errorApellido = validarApellidoAlumno(apellidoAlumno);
+        var errorDNI = validateDNI(dni);
+        var error = false;
+        if(errorNombre != ""){
+            $("#loginErrorMessageAñadirAlumNombre").empty();
+            $("#loginErrorMessageAñadirAlumNombre").append("<p style='color:red;'>"+errorNombre+"</p>");
+            $("#loginErrorMessageAñadirAlumNombre").show();
+            error = true;
+        }else{
+            $("#loginErrorMessageAñadirAlumNombre").hide();
+        }
+        if(errorApellido!=""){
+            $("#loginErrorMessageAñadirAlumApellido").empty();
+            $("#loginErrorMessageAñadirAlumApellido").append("<p style='color:red;'>"+errorApellido+"</p>");
+            $("#loginErrorMessageAñadirAlumApellido").show();
+            error = true;
+        }else{
+            $("#loginErrorMessageAñadirAlumApellido").hide();
+        }
+        if(validateDNI(dni)!=""){
+            $("#loginErrorMessageAñadirAlumID").empty();
+            $("#loginErrorMessageAñadirAlumID").append("<p style='color:red;'>"+errorDNI+"</p>");
+            $("#loginErrorMessageAñadirAlumID").show();
+            error = true;
+        }else{
+             $("#loginErrorMessageAñadirAlumID").hide();
+        }
+        if(!error){       
+            $("#modalAddAlum").modal('hide')
+            guardians.push(res);
+            target.preventDefault();
+            guardians = guardians.toString();
+            let guards = guardians.split(',');
+            guards.forEach(g => {
+                let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
+                if (pos > -1) {
+                    Gb.globalState.users[pos].classes.push(claseSeleccionada);
+                    Gb.globalState.users[pos].students.push(nombreAlumno);
+                    aux.push(Gb.globalState.users[pos].uid);
+                }
+            });
+            Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
+            //window.demo();
+            alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
+            //console.clear();
+            //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+        }
     });
+
     //Funcionalidad al boton enviar mail
     $("#boton-publicar-mail").click((target) => {
         let msgid = Gb.Util.randomWord();
@@ -509,15 +587,25 @@ $(function() {
     $("#cargarEnviarms").click((id) => {
         cargarEnviarms();
         $("#selectClassEM").empty();
+        $("#selectClassEM").append('<option value="none" selected disabled hidden>Destinatario</option>');
         //Se hace esto para saber de que tipo soy, así me mostratrá una cosa u otra en el destinatario.
         let pos = Gb.globalState.users.findIndex(us => { return us.uid == userSession.uid });
-        if (pos >= 0)
+        if (pos >= 0){
             userSession = Gb.globalState.users[pos];
-
-        $("#selectClassEM").append('<option value="none" selected disabled hidden>-clase-</option>');
-        Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
+            if(userSession.type == Gb.UserRoles.GUARDIAN){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
+            }
+            if(userSession.type == Gb.UserRoles.TEACHER){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+            }
+            if(userSession.type == Gb.UserRoles.ADMIN){
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
+            }
+        }
     });
-
     $("#cargarAdministracion").click((id) => {
         cargarAdministracion();
         $("#myTable").empty();
@@ -552,7 +640,8 @@ $(function() {
         let userId = $(this).attr('userId');
 
     });
-
+   
+   
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
