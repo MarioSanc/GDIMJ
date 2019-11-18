@@ -625,6 +625,7 @@ $(function() {
         let pass = $("#loginPass").val();
 
         Gb.login(user, pass).then(d => {
+            Gb.list();
             let u = Gb.resolve(user);
             if (u !== undefined) {
                 $.ajax({
@@ -636,6 +637,14 @@ $(function() {
                         $("#loginPage").fadeOut();
                         $("#indexPage").fadeIn();
                         userSession = u;
+                        if(u.type == Gb.UserRoles.ADMIN){
+                            $("#cargarAdministracion").show();
+                            $("#dropdawnAnadir").show();
+                        }
+                        else{
+                            $("#cargarAdministracion").hide();
+                            $("#dropdawnAnadir").hide();
+                        }
                     }
                 });
             } else {
@@ -714,6 +723,9 @@ $(function() {
     $("#cerrarSesion").click((id) => {
         userSession = [];
         Gb.logout();
+        $("#loginPage").fadeIn();
+        $("#indexPage").fadeOut();
+
     });
    
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
