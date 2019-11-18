@@ -158,8 +158,8 @@ function createTableUsers(user) {
     });
     html.push('</div></td>', );
     //Columna Opciones
-    html.push('<td class="opcionesTabla"><button type="submit" id="modificarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button>');
-    html.push('<button type="submit" id="eliminarUsuario" userId="', user.uid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+    html.push('<td class="opcionesTabla"><input type="image" id="',user.uid,'"class="userIcon modificarUsuario" src="../img/edit.png" alt="Modificar">');
+    html.push('<input type="image" id="',user.uid,'"class="userIcon eliminarUsuario" src="../img/delete.png" alt="Eliminar"></td></tr>');
 
     return $(html.join(''));
 }
@@ -184,7 +184,8 @@ function createTableStudents(user) {
     //Columna Clases
     html.push('<td>', user.cid, '</td>');
     //Columna Opciones
-    html.push('<td class="opcionesTabla"><button type="submit" id="', user.sid, '" class="btn btn-primary botonOpciones">Modificar</button></td></tr>');
+    html.push('<td class="opcionesTabla"><input type="image" id="',user.sid,'"class="userIcon modificarUsuario" src="../img/edit.png" alt="Modificar">');
+    html.push('<input type="image" id="',user.sid,'"class="userIcon eliminarUsuario" src="../img/delete.png" alt="Eliminar"></td></tr>');
 
     return $(html.join(''));
 }
@@ -643,15 +644,21 @@ $(function() {
         if (pos >= 0){
             userSession = Gb.globalState.users[pos];
             if(userSession.type == Gb.UserRoles.GUARDIAN){
+                $("#selectClassEM").append('<optgroup label="PROFESORES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
             }
             if(userSession.type == Gb.UserRoles.TEACHER){
+                $("#selectClassEM").append('<optgroup label="RESPONSABLES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                $("#selectClassEM").append('<optgroup label="CLASES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
             }
             if(userSession.type == Gb.UserRoles.ADMIN){
+                $("#selectClassEM").append('<optgroup label="CLASES">');
                 Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
+                $("#selectClassEM").append('<optgroup label="RESPONSABLES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
+                $("#selectClassEM").append('<optgroup label="PROFESORES">');
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
             }
         }
@@ -661,6 +668,15 @@ $(function() {
         $("#myTable").empty();
         Gb.globalState.users.forEach(u => $("#myTable").append(createTableUsers(u)));
         Gb.globalState.students.forEach(u => $("#myTable").append(createTableStudents(u)));
+
+        $(".modificarUsuario").click(function() { 
+            alert("Modificando usuario con ID: " + this.id + ".");
+        });
+
+        $(".eliminarUsuario").click(function() {         
+            alert("¿Está seguro de que quiere eliminar el usuario con ID: " + this.id + "?");
+            //Gb.rm(this.id);
+        });
     });
 
     $("#selectType").on("change", function() {
@@ -683,14 +699,6 @@ $(function() {
         userSession = [];
         Gb.logout();
     });
-
-
-
-    $("#modificarUsuario").click((id) => {
-        let userId = $(this).attr('userId');
-
-    });
-   
    
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
