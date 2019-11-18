@@ -334,8 +334,6 @@ async function populate(classes, minStudents, maxStudents, minParents, maxParent
 // Generalmente de la forma $("selector").cosaQueSucede(...)
 //
 $(function() {
-  $("#loginPage").hide();
-  $("#indexPage").show();
     // funcion de actualización de ejemplo. Llámala para refrescar interfaz
     window.demo = function update(result) {
         try {
@@ -600,7 +598,7 @@ $(function() {
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
             }
             if(userSession.type == Gb.UserRoles.ADMIN){
-                Gb.globalState.users.forEach(c => $("#selectClassEM").append(createClases(c)));
+                Gb.globalState.classes.forEach(c => $("#selectClassEM").append(createClases(c)));
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createGuardian(c)));
                 Gb.globalState.users.forEach(c => $("#selectClassEM").append(createProfesor(c)));
             }
