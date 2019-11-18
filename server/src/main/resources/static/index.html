@@ -414,7 +414,7 @@
 
             <div class="form-row datos-anuncio">
                 <div class="form-group col-md-6">
-                    <label for="selectClass2">Selecciona clase</label>
+                    <label for="selectClass2">Selecciona destinatario</label>
                     <select class="form-control" data-live-search="true" id="selectClassEM">
                         <option value="none" selected disabled hidden>-clase-</option>
                         <option>1A</option>
@@ -428,6 +428,14 @@
                     <div class="input-group">
                         <input type="text" class="form-control" id="selectAsunto">
                     </div>
+                </div>
+            </div>
+            <div class="form-row datos-anuncio">
+                <div id="errorMessageEnviarMsAsunto" style="text-align: center; display:none;"class="form-group col-md-6" >
+                    <p style='color:red;'>Se tiene que seleccionar algun destinatario</p>
+                </div>
+                <div id="errorMessageEnviarMsSeccion" style="text-align: center; display:none;"class="form-group col-md-6">
+                    <p style='color:red;'>Se tiene que seleccionar algun destinatario</p>
                 </div>
             </div>
             <div class="form-row texto-anuncio">

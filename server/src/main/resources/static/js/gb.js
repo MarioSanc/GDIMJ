@@ -33,7 +33,7 @@ function validarContraseña(contraseña){
 function validarTelefonoUsuario(telefono){
     var regex = /^\d{3}-\d{3}-\d{3}$/;
     if(telefono == "")return "El campo telefono no puede ser vacio";
-    if(!regex.test(telefono))return "Formato del telefono erroneo(ddd-ddd-ddd)";
+    if(!regex.test(telefono))return "Formato del teléfono erróneo(ddd-ddd-ddd)";
     return "";
 }
 function validarApellidoAlumno(apellidoAlumno){
@@ -469,7 +469,7 @@ $(function() {
         var errorTelefono = validarTelefonoUsuario(tel);
         if(!validarContraseña(contraseña)){
             $("#errorMessageAñadirUsuarioContraseña").empty();
-            $("#errorMessageAñadirUsuarioContraseña").append("<p style='color:red;'>Formato de la contraseña incorrecto</p>");
+            $("#errorMessageAñadirUsuarioContraseña").append("<p style='color:red;'>Formato de la contraseña incorrecto(Entre 5 y 100 caracteres, 1 Mayúscula, 1 Minúscula y 1 dígito)</p>");
             $("#errorMessageAñadirUsuarioContraseña").show();
             error = true;
         }
@@ -597,11 +597,27 @@ $(function() {
         let asunto = $("#selectAsunto").val();
         let ms = $("#inputTextoAnuncio").val();
         target.preventDefault();
-        Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms, userSesion.uid));
-        alert(" Se ha enviado el mail: " + ms + " a " + claseEnviar + "\nCon asunto: " + asunto);
-        // window.demo();
-        //console.clear();
-        //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+        var error = false;
+        if(asunto == ""){
+            $("#errorMessageEnviarMsAsunto").empty();
+            $("#errorMessageEnviarMsAsunto").append("<p style='color:red;'>El asunto no puede ser vacio</p>");
+            $("#errorMessageEnviarMsAsunto").show();
+            error = true;
+        }else $("#errorMessageEnviarMsAsunto").hide();
+        if(claseEnviar == null){
+            
+            $("#errorMessageEnviarMsSeccion").empty();
+            $("#errorMessageEnviarMsSeccion").append("<p style='color:red;'>Se tiene que seleccionar algun destinatario</p>");
+            $("#errorMessageEnviarMsSeccion").show();
+            error = true;
+        }else $("#errorMessageEnviarMsSeccion").hide();
+        if(!error){
+            //Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms, userSesion.uid));
+            alert(" Se ha enviado el mail: " + ms + " a " + claseEnviar + "\nCon asunto: " + asunto);
+            // window.demo();
+            //console.clear();
+            //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+        }
     });
     //Logeo
     $("#loginButton").click((id) => {
