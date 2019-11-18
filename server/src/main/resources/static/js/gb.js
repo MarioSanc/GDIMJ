@@ -22,6 +22,142 @@ var userSession = [];
 // Código de comportamiento, que sólo se llama desde consola (para probarlo) o desde la parte 2,
 // en respuesta a algún evento.
 //
+var bandejaEntrada = [
+    {
+        'msgid': "12345",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['read'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "54321",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': [],
+        'title': "Hola viajero2",
+        'body': "Solo queria saludar otra vez porque soy extremadamente pesado."
+    },
+    {
+        'msgid': "12",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['fav'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "25",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['fav','read'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "3",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['read','sent'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "45",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['read','sent'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "5",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['read','arch'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+    {
+        'msgid': "6",
+        'date' : "12-3-19",
+        'from' : "kqcka",
+        'to': "qbqdq",
+        'labels': ['arch'],
+        'title': "Hola viajero",
+        'body': "Solo queria saludar."
+    },
+];
+function auxiliarr(){
+    $(".cargarMail").click(function() {
+        $("#ContestarMs").empty();
+        var id = this.id;
+        bandejaEntrada.forEach(function(m){ 
+            if(id == m.msgid){
+                m.labels.push("read");  
+                window.demo(); 
+                $("#ContestarMs").append(createMail(m));
+                 //Funcionalidad al boton responder mail
+                $(".botonResponderMailDOS").click(function (target) {
+                    let msgid = U.randomWord();
+                    let responseId = globalMessage.from;
+                    let asunto = globalMessage.title;
+                    let ms = tinymce.activeEditor.getContent().slice(3, -4);
+                    target.preventDefault();
+                    //Gb.send(new Gb.Message(msgid, Date.now(), globalMessage.to[0], responseId, [Gb.MessageLabels.SENT], asunto, ms));
+                    bandejaEntrada.push({
+                        'msgid': msgid ,
+                        'date' : Date.now(),
+                        'from' : "kqcka",
+                        'to':responseId,
+                        'labels': [],
+                        'title': asunto,
+                        'body': ms
+                    });
+                    alert(" Se ha enviado el mail: " + ms + " a " + responseId + "\nCon asunto: " + asunto);
+                    window.demo();
+                    //console.clear();
+                    // console.log("online!", JSON.stringify(Gb.globalState, null, 2));
+                });
+            }
+        });
+    });
+}
+function contarTodosMs() {
+    let contador = 0;
+    bandejaEntrada.forEach(m => {
+        if (!m.labels.includes("read")) {
+            contador = contador + 1;
+        }
+    });
+
+    return contador;
+}
+function createItems(mensaje) {
+    let html = [];
+    html = ['<a href="#" class="cargarMail list-group-item list-group-item-action flex-column align-items-start" id=', mensaje.msgid, '>', ];
+    if (!mensaje.labels.includes("read")) {
+        html.push('<div class="unread"></div>', );
+    }
+    html.push(
+        '<div class="d-flex w-100 justify-content-between">',
+        '<h5 class="mb-1">', mensaje.from, '</h5>',
+        //'<small>', new Intl.DateTimeFormat('es-ES').format(mensaje.date), '</small>',
+        '</div>',
+        '<p class="mb-1">', mensaje.title, '</p>',
+        '<small style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">', mensaje.body, '</small>',
+        '</a>')
+
+    return $(html.join(''));
+}
 function validarContraseña(contraseña){
     var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)([A-Za-z\d]|[^ ]){5,100}$/;
     if(regex.test(contraseña) == true){
@@ -95,7 +231,7 @@ function createMail(mensaje) {
         '<!-- botón para enviar el formulario; justify-content-end lo justifica a la derecha -->',
         '<div class="form-row justify-content-end" style="margin-right:15px;">',
         ' <button type="submit" id="boton-descartar" class="btn btn-primary">Descartar mensaje</button>',
-        '<button id="botonResponderMailDOS" class="btn btn-primary" style="margin-left: 10px">Enviar mensaje</button>',
+        '<button  class="btn btn-primary botonResponderMailDOS" style="margin-left: 10px">Enviar mensaje</button>',
         '</div>',
         '</form>',
         '<script src="js/jquery-3.3.1.js"></script>',
@@ -354,8 +490,14 @@ $(function() {
         try {
             // vaciamos un contenedor
             $("#accordionExample").empty();
+            $("#list-groupPhp5").empty();
+            $("#li_left_all_num").empty();
             // y lo volvemos a rellenar con su nuevo contenido
             Gb.globalState.messages.forEach(m => $("#accordionExample").append(createGroupItem(m)));
+            bandejaEntrada.forEach(m => $("#list-groupPhp5").append(createItems(m)));
+            $("#li_left_all_num").append(contarTodosMs());
+            // Funcionalidad para ver el mensaje que se quiera en responder mail.
+            auxiliarr();
             // y asi para cada cosa que pueda haber cambiado
         } catch (e) {
             console.log('Error actualizando', e);
@@ -365,20 +507,8 @@ $(function() {
     $("#cargarContestar").click((id) => {
         cargarContestar();
     });
-    // Funcionalidad para ver el mensaje que se quiera en responder mail.
-    $("#list-groupPhp5 a").click((id) => {
-        var currentId = id.currentTarget.id;
-        $("#ContestarMs").empty();
-        Gb.globalState.messages.forEach(function(m) {
-            if (currentId == m.msgid) {
-                m.labels.push("read");
-                $("#ContestarMs").append(createMail(m))
-                globalMessage = m;
-                //window.demo();
-                $("#list-groupPhp5").children("#" + currentId).toggleClass('active');
-            }
-        });
-    });
+   
+  
     //Boton añadir clase
     $("#button-save-clas").click((e) => {
       $("#validaNombreClase").empty();
@@ -400,10 +530,10 @@ $(function() {
         // Si el script ha llegado a este punto, todas las condiciones
         // se han cumplido, por lo que se devuelve el valor true
         profesores = profesores.toString();
-        let profes = profesores.split(',');
+        //let profes = profesores.split(',');
         alumnos = alumnos.toString();
-        let alumns = alumnos.split(',');
-        profes.forEach(p => {
+       // let alumns = alumnos.split(',');
+       /* profes.forEach(p => {
             let pos = Gb.globalState.users.findIndex(u => { return u.first_name == p });
             if (pos > -1) {
                 Gb.globalState.users[pos].classes.push(nombrClase);
@@ -413,10 +543,10 @@ $(function() {
         alumns.forEach(p => {
             let pos = Gb.globalState.students.findIndex(u => { return u.firstName == p });
             if (pos > -1) auxAlumnos.push(Gb.globalState.students[pos].sid);
-            //Gb.globalState.users[pos].classes.push(nombrClase);
+            //Gb.globalState.students[pos].classes.push(nombrClase);
 
-        });
-        Gb.addClass(new Gb.EClass(nombrClase, auxAlumnos, auxProfes));
+        });*/
+        Gb.addClass({cid: nombrClase});
         //window.demo();
         //console.clear();
         //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
@@ -530,6 +660,8 @@ $(function() {
                     " \nCon telefono/s:\n " + telefonos);
             }
         }
+        window.demo();
+        Gb.list();
     });
     //Funcionalidad al boton añadir alumno
     $("#boton-publicar").click((target) => {
@@ -568,22 +700,27 @@ $(function() {
         }else{
              $("#loginErrorMessageAñadirAlumID").hide();
         }
+      
         if(!error){       
-            $("#modalAddAlum").modal('hide')
+            $("#modalAddAlum").modal('hide');
             guardians.push(res);
             target.preventDefault();
             guardians = guardians.toString();
-            let guards = guardians.split(',');
+            let guards = guardians.split(','); 
+            Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, null));
             guards.forEach(g => {
                 let pos = Gb.globalState.users.findIndex(u => { return u.first_name == g });
                 if (pos > -1) {
-                    Gb.globalState.users[pos].classes.push(claseSeleccionada);
-                    Gb.globalState.users[pos].students.push(nombreAlumno);
+                    let v = Gb.globalState.users[pos];
+                    v.classes.push(claseSeleccionada);
+                    v.students.push(dni);
+                    Gb.set(v);
                     aux.push(Gb.globalState.users[pos].uid);
                 }
             });
-            Gb.addStudent(new Gb.Student(dni, nombreAlumno, apellidoAlumno, claseSeleccionada, aux));
-            //window.demo();
+           
+            window.demo();
+            Gb.list();
             alert("Se ha añadido el alumno: " + nombreAlumno + " " + apellidoAlumno + "\nCon dni: " + dni + " a la clase " + claseSeleccionada + "\nCon responsables:\n" + guardians);
             //console.clear();
             //console.log("online!", JSON.stringify(Gb.globalState, null, 2));
@@ -595,7 +732,8 @@ $(function() {
         let msgid = Gb.Util.randomWord();
         let claseEnviar = $("#selectClassEM").val();
         let asunto = $("#selectAsunto").val();
-        let ms = $("#inputTextoAnuncio").val();
+        //let ms = $("#inputTextoAnuncio").val();
+        let ms = tinymce.activeEditor.getContent().slice(3, -4);
         target.preventDefault();
         var error = false;
         if(asunto == ""){
@@ -612,6 +750,16 @@ $(function() {
             error = true;
         }else $("#errorMessageEnviarMsSeccion").hide();
         if(!error){
+            bandejaEntrada.push({
+                'msgid': msgid ,
+                'date' : "12-3-19",
+                'from' : userSession.uid,
+                'to': claseEnviar,
+                'labels': ['sent'],
+                'title': asunto,
+                'body': ms
+            });
+            window.demo();
             //Gb.send(new Gb.Message(msgid, null, "u8Z9FQ", claseEnviar, [Gb.MessageLabels.SENT], asunto, ms, userSesion.uid));
             alert(" Se ha enviado el mail: " + ms + " a " + claseEnviar + "\nCon asunto: " + asunto);
             // window.demo();
@@ -636,6 +784,9 @@ $(function() {
                         Gb.list();
                         $("#loginPage").fadeOut();
                         $("#indexPage").fadeIn();
+                        $("#mainIndexPage").show();
+                        $("#sendMessajePage").hide();
+                        $("#administrationPage").hide();
                         userSession = u;
                         if(u.type == Gb.UserRoles.ADMIN){
                             $("#cargarAdministracion").show();
@@ -728,7 +879,54 @@ $(function() {
         $("#indexPage").fadeOut();
 
     });
-   
+           // Ver todos.
+           $("#filtroTodos").click((id) => {
+            $("#list-groupPhp5").empty();
+            $("#labelListaMensajes").text("Todos");
+            bandejaEntrada.forEach(m => $("#list-groupPhp5").append(createItems(m)));
+            auxiliarr();
+            
+        });
+        // Ver recibidos.
+        $("#filtroRecibidos").click((id) => {
+            $("#list-groupPhp5").empty();
+            $("#labelListaMensajes").text("Recibidos");
+            bandejaEntrada.forEach(m => {
+                if (m.labels.includes("received")) {
+                    $("#list-groupPhp5").append(createItems(m));
+                }
+            });
+        });
+        // Ver favoritos.
+        $("#filtroFavoritos").click((id) => {
+            $("#list-groupPhp5").empty();
+            $("#labelListaMensajes").text("Favoritos");
+            bandejaEntrada.forEach(m => {
+                if (m.labels.includes("fav")) {
+                    $("#list-groupPhp5").append(createItems(m));
+                }
+            });
+        });
+        // Ver enviados.
+        $("#filtroEnviados").click((id) => {
+            $("#list-groupPhp5").empty();
+            $("#labelListaMensajes").text("Enviados");
+            bandejaEntrada.forEach(m => {
+                if (m.labels.includes("sent")) {
+                    $("#list-groupPhp5").append(createItems(m));
+                }
+            });
+        });
+        // Ver archivados.
+        $("#filtroArchivados").click((id) => {
+            $("#list-groupPhp5").empty();
+            $("#labelListaMensajes").text("Archivados");
+            bandejaEntrada.forEach(m => {
+                if (m.labels.includes("arch")) {
+                    $("#list-groupPhp5").append(createItems(m));
+                }
+            });
+        });
     // Servidor a utilizar. También puedes lanzar tú el tuyo en local (instrucciones en Github)
     Gb.connect("http://gin.fdi.ucm.es:8080/api/");
 
